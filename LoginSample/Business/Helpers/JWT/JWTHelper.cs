@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business.Utils.JWT
+namespace Business.Helpers.JWT
 {
     public class JWTHelper : ITokenHelper
     {
@@ -34,7 +34,7 @@ namespace Business.Utils.JWT
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
              }),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)

@@ -32,12 +32,11 @@ export class LoginComponent implements OnInit {
 
   login(){
     let loginModel = Object.assign({},this.loginForm.value); 
-    let response = {};
     if(this.loginForm.valid){
       this.authService.login(loginModel).subscribe((res) => {
-        response = res;
-        let expireDate = new Date(res.data.expirationDate);
-        this.cookieService.set("token", res.data.token, expireDate);
+        // let expireDate = new Date(res.data.expirationDate);
+        // this.cookieService.set("token", res.data.token, expireDate);
+        this.authService.writeTokenToCookie(res.data.token,res.data.expirationDate);
         alert("Giriş Başarılı");  
         this.router.navigate(['main']);
       },      

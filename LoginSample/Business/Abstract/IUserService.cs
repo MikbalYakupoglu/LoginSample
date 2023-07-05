@@ -6,10 +6,10 @@ namespace Business.Abstract
 {
     public interface IUserService
     {
-        IDataResult<IEnumerable<User>> GetAllUsers();
-        IDataResult<User> GetUser(int id);
-        IDataResult<User> GetUser(string email);
-        IResult Register(UserForRegisterDto userToRegisterDto);
+        IDataResult<IEnumerable<UserDto>> GetAllUsers();
+        IDataResult<UserDto> GetUser(int id);
+        IDataResult<UserDto> GetUser(string email);
+        IDataResult<Token> Register(UserForRegisterDto userToRegisterDto);
         IDataResult<Token> Login(UserForLoginDto userToLoginDto);
         IResult Remove(int id);
     }

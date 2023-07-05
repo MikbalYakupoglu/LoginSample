@@ -1,9 +1,12 @@
+using AutoMapper;
 using Business.Abstract;
 using Business.Concrete;
-using Business.Utils.JWT;
+using Business.Helpers.JWT;
+using Business.Helpers.Mapper;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
+using Entity;
 using Entity.DTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +22,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<UserValidator<UserForRegist
 builder.Services.AddDbContext<LoginSampleContext>();
 builder.Services.AddScoped<IUserDal, EfUserDal>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 builder.Services.AddSingleton<ITokenHelper, JWTHelper>();
 

@@ -33,6 +33,7 @@ export class RegisterComponent implements OnInit{
     if(this.registerForm.valid){
       this.authService.register(registerModel).subscribe((res) => {
         alert(res.message);
+        this.authService.writeTokenToCookie(res.data.token, res.data.expirationDate);
         this.router.navigate(['main']);
       },
       (errorRes) => {

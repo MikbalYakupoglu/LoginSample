@@ -43,9 +43,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpPost("remove")]
         [Authorize]
-        public IActionResult Remove(int id)
+        public IActionResult Remove(UserDto userDto)
         {
-            var result = _userService.Remove(id);
+            var result = _userService.Remove(userDto.Id);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -67,14 +67,22 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("get")]
         [Authorize]
-        public IActionResult Get(string email)
+        public IActionResult Get()
         {
+            var email = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var result = _userService.GetUser(email);
 
             if (!result.Success)
                 return BadRequest(result);
 
             return Ok(result);
+        }
+
+        [HttpGet("verify")]
+        [Authorize]
+        public IActionResult VerifyToken()
+        {
+            return Ok();
         }
 
 
