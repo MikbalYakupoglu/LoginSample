@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.css']
 })
-export class MainComponent implements OnInit{
+export class HomeComponent implements OnInit {
 
   constructor(private authService:AuthService) { }
 
@@ -15,5 +15,4 @@ export class MainComponent implements OnInit{
   async ngOnInit(): Promise<void> {
     this.isLogged = await this.authService.isAuthenticated();
   }
-  
 }

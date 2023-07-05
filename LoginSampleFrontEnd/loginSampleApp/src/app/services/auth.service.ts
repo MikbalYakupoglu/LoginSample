@@ -29,6 +29,10 @@ export class AuthService {
     return this.httpClient.post<SingleResultModel<TokenModel>>(newPath, registerModel);
   }
 
+  logout(){
+    this.cookieService.delete('token');
+  }
+
   writeTokenToCookie(token:string, expirationDate:Date){
     let expireDate = new Date(expirationDate);
     this.cookieService.set("token", token, expireDate);

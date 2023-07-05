@@ -1,4 +1,8 @@
 ﻿using Business.Abstract;
+using Business.Utils;
+using Core.Results;
+using Core.Utils;
+using Entity;
 using Entity.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +25,12 @@ namespace LoginSampleAPI.Controllers
         [AllowAnonymous]
         public IActionResult Register(UserForRegisterDto userForRegisterDto)
         {
-            var result = _userService.Register(userForRegisterDto);
+            User newUser = HashPasswordAndCreateUser(userForRegisterDto);
+            var result = _userService.Register(userForRegisterDto, newUser);
 
             if (!result.Success)
                 return BadRequest(result);
+
 
             return Ok(result);
         }
@@ -33,10 +39,15 @@ namespace LoginSampleAPI.Controllers
         [AllowAnonymous]
         public IActionResult Login(UserForLoginDto userForLoginDto)
         {
-            var result = _userService.Login(userForLoginDto);
+            User userInDb;
+            var result = _userService.Login(userForLoginDto, out userInDb);
 
             if (!result.Success)
                 return BadRequest(result);
+
+            var passwordResult = PasswordHasher.VerifyPassword(userForLoginDto.Password, userInDb.PasswordHash, userInDb.PasswordSalt);
+            if (!passwordResult)
+                return BadRequest(Messages.IncorrectPassword);
 
             return Ok(result);
         }
@@ -86,5 +97,22 @@ namespace LoginSampleAPI.Controllers
         }
 
 
+
+
+        private static User HashPasswordAndCreateUser(UserForRegisterDto userForRegisterDto)
+        {
+            byte[] passwordHash, passwordSalt;
+            PasswordHasher.HashPassword(userForRegisterDto.Password, out passwordHash, out passwordSalt);
+
+            var newUser = new User
+            {
+                IsActive = true,
+                Email = userForRegisterDto.Email,
+                Phone = userForRegisterDto.Phone,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
+            return newUser;
+        }
     }
 }

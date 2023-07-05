@@ -40,5 +40,10 @@ export class UserComponent implements OnInit{
       alert(errorRes.error.message);
     })
   }
+
+  logout(){
+    this.userService.logout();
+    this.router.navigate(['']);
+  }
   
 }

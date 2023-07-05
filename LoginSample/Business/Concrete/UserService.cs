@@ -69,7 +69,7 @@ namespace Business.Concrete
             return new SuccessResult("Kullanıcı Başarıyla Silindi");
         }
 
-        public IDataResult<Token> Login(UserForLoginDto userForLoginDto)
+        public IDataResult<Token> Login(UserForLoginDto userForLoginDto,out User userInDb)
         {
             var result = BusinessRules.Run(
              CheckIfEmailNull(userForLoginDto.Email),
@@ -77,22 +77,29 @@ namespace Business.Concrete
              );
 
             if (!result.Success)
+            {
+                userInDb = null;
                 return new ErrorDataResult<Token>(result.Message);
+            }
 
-            var userInDB = _userDal.Get(u => u.Email == userForLoginDto.Email);
-            if (userInDB == null)
+            var _userInDb = _userDal.Get(u => u.Email == userForLoginDto.Email);
+            if (_userInDb == null)
+            {
+                userInDb = null;
                 return new ErrorDataResult<Token>(Messages.UserNotFound);
+            }
 
-            var passwordResult = PasswordHasher.VerifyPassword(userForLoginDto.Password, userInDB.PasswordHash, userInDB.PasswordSalt);
-            if (!passwordResult)
-                return new ErrorDataResult<Token>(Messages.IncorrectPassword);
+            //var passwordResult = PasswordHasher.VerifyPassword(userForLoginDto.Password, userInDB.PasswordHash, userInDB.PasswordSalt);
+            //if (!passwordResult)
+            //    return new ErrorDataResult<Token>(Messages.IncorrectPassword);
 
-            var token = _tokenHelper.CreateToken(userInDB);
+            var token = _tokenHelper.CreateToken(_userInDb);
 
+            userInDb = _userInDb;
             return new SuccessDataResult<Token>(token);
         }
 
-        public IDataResult<Token> Register(UserForRegisterDto userForRegisterDto)
+        public IDataResult<Token> Register(UserForRegisterDto userForRegisterDto, User newUser)
         {
             var result = BusinessRules.Run(
                 CheckIfEmailNull(userForRegisterDto.Email),
@@ -109,21 +116,8 @@ namespace Business.Concrete
             if (!validationResult.IsValid)
                 return new ErrorDataResult<Token>(validationResult.Errors.FirstOrDefault().ErrorMessage);
 
-
-            byte[] passwordHash, passwordSalt;
-            PasswordHasher.HashPassword(userForRegisterDto.Password,out passwordHash, out passwordSalt);
-
-            var newUser = new User
-            {
-                IsActive = true,
-                Email = userForRegisterDto.Email,
-                Phone = userForRegisterDto.Phone,
-                PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
-            };
-
+                      
             _userDal.Create(newUser);
-
             var token = _tokenHelper.CreateToken(newUser);
 
             return new SuccessDataResult<Token>(token,"Kayıt Başarılı");

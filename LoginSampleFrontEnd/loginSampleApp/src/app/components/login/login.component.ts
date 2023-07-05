@@ -38,11 +38,20 @@ export class LoginComponent implements OnInit {
         // this.cookieService.set("token", res.data.token, expireDate);
         this.authService.writeTokenToCookie(res.data.token,res.data.expirationDate);
         alert("Giriş Başarılı");  
-        this.router.navigate(['main']);
+        this.router.navigate(['']);
       },      
       (errorRes) => {
-        alert(errorRes.error.message)
+        if(errorRes.error.message !== undefined){
+          alert(errorRes.error.message)
+        }
+        else{
+          alert(errorRes.error)
+        }
+        
       });
+    }
+    else{
+      alert("Form boş bırakılamaz.");
     }
   }
 }
