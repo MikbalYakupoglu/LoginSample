@@ -28,8 +28,8 @@ export class UserComponent implements OnInit{
     })    
   }
 
-  remove(){
-    this.userService.remove(this.userModel).subscribe((res) => {
+  delete(){
+    this.userService.delete(this.userModel).subscribe((res) => {
       alert(res.message);
       this.userService.logout();
       this.router.navigate(['main']);

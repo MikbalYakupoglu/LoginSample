@@ -1,15 +1,23 @@
-using AutoMapper;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Autofac.Extras.DynamicProxy;
+using AutoMapper.Execution;
+using Business;
 using Business.Abstract;
 using Business.Concrete;
 using Business.Helpers.JWT;
 using Business.Helpers.Mapper;
 using Business.Validation;
+using Castle.DynamicProxy;
+using Core.Extensions;
+using Core.Utils.Interceptors;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
-using Entity;
 using Entity.DTOs;
 using FluentValidation;
+using LoginSampleAPI.Aspects;
+using LoginSampleAPI.Controllers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -66,6 +74,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.ConfigureCustomExceptionMiddleware();
+
 app.UseHttpsRedirection();
 
 app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
@@ -75,6 +85,6 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers();   
 
 app.Run();

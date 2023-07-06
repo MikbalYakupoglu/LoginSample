@@ -4,6 +4,7 @@ using Core.Results;
 using Core.Utils;
 using Entity;
 using Entity.DTOs;
+using LoginSampleAPI.Aspects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -15,18 +16,17 @@ namespace LoginSampleAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
-
         public UsersController(IUserService userService)
         {
             _userService = userService;
         }
 
 
-        [HttpPost("remove")]
+        [HttpPost("delete")]
         [Authorize]
-        public IActionResult Remove(UserDto userDto)
+        public IActionResult Delete(UserDto userDto)
         {
-            var result = _userService.Remove(userDto.Id);
+            var result = _userService.Delete(userDto.Id);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -36,7 +36,7 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("getall")]
         [Authorize]
-        public IActionResult GetAll(int id)
+        public IActionResult GetAll()
         {
             var result = _userService.GetAllUsers();
 
@@ -50,8 +50,8 @@ namespace LoginSampleAPI.Controllers
         [Authorize]
         public IActionResult Get()
         {
-            var email = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _userService.GetUser(email);
+            var id = User.FindFirstValue("name");
+            var result = _userService.GetUser(int.Parse(id));
 
             if (!result.Success)
                 return BadRequest(result);

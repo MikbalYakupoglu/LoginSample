@@ -1,11 +1,11 @@
 ﻿using Entity.DTOs;
-using Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
 using Business.Utils;
 using Core.Utils;
+using Entity.Concrete;
 
 namespace LoginSampleAPI.Controllers
 {

@@ -1,4 +1,5 @@
-﻿using Entity;
+﻿using Core.DataAccess;
+using Entity.Concrete;
 using Entity.DTOs;
 using System;
 using System.Collections.Generic;
@@ -9,12 +10,8 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
-    public interface IUserDal
+    public interface IUserDal : IEntityRepositoryBase<User>
     {
-        void Create(User user);
-        void Remove(User user);
-        void Update(User user);
-        User Get(Expression<Func<User, bool>> filter);
-        IEnumerable<User> GetAll(Expression<Func<User, bool>> filter = null);
+        //void AddRoleToUser(User user, Role role);
     }
 }

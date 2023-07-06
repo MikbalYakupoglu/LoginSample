@@ -21,8 +21,8 @@ export class UserService {
     return this.httpClient.get<SingleResultModel<UserModel>>(newPath);
   }
 
-  remove(userModel:UserModel) : Observable<ResultModel> {
-    let newPath =  this.apiUrl + 'remove';    
+  delete(userModel:UserModel) : Observable<ResultModel> {
+    let newPath =  this.apiUrl + 'delete';    
     return this.httpClient.post<ResultModel>(newPath, userModel);
   }
 

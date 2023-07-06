@@ -6,8 +6,8 @@ using Business.Validation;
 using Core.Results;
 using Core.Utils;
 using DataAccess.Abstract;
-using Entity;
 using Entity.Abstract;
+using Entity.Concrete;
 using Entity.DTOs;
 using FluentValidation.Results;
 
@@ -59,7 +59,7 @@ namespace Business.Concrete
             return new SuccessDataResult<IEnumerable<UserDto>>(_mapper.Map<IEnumerable<User>, IEnumerable<UserDto>> (users));       
         }
 
-        public IResult Remove(int id)
+        public IResult Delete(int id)
         {
             var userToDelete = _userDal.Get(u => id == u.Id);
 
@@ -67,7 +67,7 @@ namespace Business.Concrete
                 return new ErrorResult(Messages.IdNotFound);
 
             userToDelete.IsActive = false;
-            _userDal.Remove(userToDelete);
+            _userDal.Delete(userToDelete);
             return new SuccessResult(Messages.RemoveSuccess);
         }
 

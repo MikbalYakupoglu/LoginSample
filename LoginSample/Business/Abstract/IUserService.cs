@@ -1,5 +1,5 @@
 ﻿using Core.Results;
-using Entity;
+using Entity.Concrete;
 using Entity.DTOs;
 
 namespace Business.Abstract
@@ -11,6 +11,6 @@ namespace Business.Abstract
         IDataResult<UserDto> GetUser(string email);
         IDataResult<Token> Register(UserForRegisterDto userToRegisterDto, User newUser);
         IDataResult<Token> Login(UserForLoginDto userToLoginDto, out User userInDb);
-        IResult Remove(int id);
+        IResult Delete(int id);
     }
 }

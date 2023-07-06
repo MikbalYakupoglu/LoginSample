@@ -1,4 +1,4 @@
-﻿using Entity;
+﻿using Entity.Concrete;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -46,7 +46,6 @@ namespace Business.Helpers.JWT
 
             var TokenEntity = new Token()
             {
-                UserId = user.Id,
                 token = jwt,
                 ExpirationDate = tokenDescriptor.Expires
             };
