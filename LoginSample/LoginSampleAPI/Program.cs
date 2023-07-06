@@ -3,7 +3,6 @@ using Business.Concrete;
 using Business.Helpers.JWT;
 using Business.Helpers.Mapper;
 using Business.Validation;
-using Core.Extensions;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -64,8 +63,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.ConfigureCustomExceptionMiddleware();
 
 app.UseHttpsRedirection();
 

@@ -1,10 +1,5 @@
 ﻿using Business.Abstract;
-using Business.Utils;
-using Core.Results;
-using Core.Utils;
-using Entity;
 using Entity.DTOs;
-using LoginSampleAPI.Aspects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
