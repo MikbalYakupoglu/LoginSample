@@ -3,6 +3,7 @@ using Business.Abstract;
 using Business.Concrete;
 using Business.Helpers.JWT;
 using Business.Helpers.Mapper;
+using Business.Validation;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
@@ -18,27 +19,28 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddValidatorsFromAssemblyContaining<UserValidator<UserForRegisterDto>>();
-
 builder.Services.AddDbContext<LoginSampleContext>();
-builder.Services.AddScoped<IUserDal, EfUserDal>();
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddAutoMapper(typeof(UserProfile));
 
+builder.Services.AddScoped<IUserDal, EfUserDal>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 builder.Services.AddSingleton<ITokenHelper, JWTHelper>();
+builder.Services.AddSingleton<UserForRegisterValidator>();
+
 
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(o =>
+}).AddJwtBearer(options =>
 {
-    o.TokenValidationParameters = new TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey
-        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = false,   

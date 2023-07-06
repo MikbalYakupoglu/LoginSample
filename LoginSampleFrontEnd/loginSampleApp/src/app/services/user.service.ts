@@ -14,7 +14,7 @@ export class UserService {
 
   constructor(private httpClient:HttpClient, private cookieService: CookieService) { }
 
-  apiUrl = 'https://localhost:7142/user/';
+  apiUrl = 'https://localhost:7142/users/';
 
   getUser() : Observable<SingleResultModel<UserModel>>{
     let newPath = this.apiUrl + 'get';

@@ -17,7 +17,7 @@ export class AuthService {
 
   constructor(private httpClient:HttpClient, private cookieService: CookieService) { }
 
-  apiUrl = 'https://localhost:7142/user/';
+  apiUrl = 'https://localhost:7142/auth/';
 
   login(loginModel:LoginModel) : Observable<SingleResultModel<TokenModel>>{
     let newPath = this.apiUrl + 'login';
@@ -29,41 +29,19 @@ export class AuthService {
     return this.httpClient.post<SingleResultModel<TokenModel>>(newPath, registerModel);
   }
 
-  logout(){
-    this.cookieService.delete('token');
-  }
+  validateToken(){
+    let newPath = this.apiUrl + 'verify';
+    return this.httpClient.get(newPath, {observe: 'response'});
+  } 
+
+
 
   writeTokenToCookie(token:string, expirationDate:Date){
     let expireDate = new Date(expirationDate);
     this.cookieService.set("token", token, expireDate);
   }
 
-
-  validateToken(){
-    let newPath = this.apiUrl + 'verify';
-    return this.httpClient.get(newPath, {observe: 'response'});
-  }
-  
-  // isAuthenticated(): boolean{
-  //   if (this.cookieService.check("token")) {
-  //     this.validateToken().subscribe((res) => {
-  //       console.log("res  : "+res);
-  //       return true;
-  //     },
-  //     (errorRes) => {
-  //       console.log("errorRes : " +errorRes);
-  //       return false;
-  //     })
-  //   }
-  //   else{
-  //     return false;
-  //   }
-  //   return false;
-  // }
-
-  
-
-    isAuthenticated(): Promise<boolean>{
+  isAuthenticated(): Promise<boolean>{
       return new Promise<boolean>((resolve, reject) => {
         this.validateToken().subscribe((res) => {
           if(res.status === HttpStatusCode.Ok){           
@@ -76,9 +54,11 @@ export class AuthService {
         (errorRes) => {
           resolve(false);
         })
-      })
+      });        
+    }
+
+    deleteTokenIfExpired(){
       
-        
     }
 
 

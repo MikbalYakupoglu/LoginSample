@@ -8,7 +8,8 @@
         public const string IdNotFound = "Id Bulunamadı.";
         public const string UserNotFound = "Kullanıcı Adı Bulunamadı.";
         public const string IncorrectPassword = "Geçersiz Şifre.";
-
+        public const string RegisterSuccess = "Kayıt Başarılı.";
+        public const string RemoveSuccess = "Kullanıcı Başarıyla Silindi.";
 
     }
 }

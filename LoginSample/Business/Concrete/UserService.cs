@@ -18,13 +18,15 @@ namespace Business.Concrete
         private readonly IUserDal _userDal;
         private readonly ITokenHelper _tokenHelper;
         private readonly IMapper _mapper;
+        private readonly UserForRegisterValidator _validator;
 
 
-        public UserService(IUserDal userDal, ITokenHelper tokenHelper, IMapper mapper)
+        public UserService(IUserDal userDal, ITokenHelper tokenHelper, IMapper mapper, UserForRegisterValidator validator)
         {
             _userDal = userDal;
             _tokenHelper = tokenHelper;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public IDataResult<UserDto> GetUser(int id)
@@ -66,7 +68,7 @@ namespace Business.Concrete
 
             userToDelete.IsActive = false;
             _userDal.Remove(userToDelete);
-            return new SuccessResult("Kullanıcı Başarıyla Silindi");
+            return new SuccessResult(Messages.RemoveSuccess);
         }
 
         public IDataResult<Token> Login(UserForLoginDto userForLoginDto,out User userInDb)
@@ -89,10 +91,6 @@ namespace Business.Concrete
                 return new ErrorDataResult<Token>(Messages.UserNotFound);
             }
 
-            //var passwordResult = PasswordHasher.VerifyPassword(userForLoginDto.Password, userInDB.PasswordHash, userInDB.PasswordSalt);
-            //if (!passwordResult)
-            //    return new ErrorDataResult<Token>(Messages.IncorrectPassword);
-
             var token = _tokenHelper.CreateToken(_userInDb);
 
             userInDb = _userInDb;
@@ -110,8 +108,10 @@ namespace Business.Concrete
             if (!result.Success)
                 return new ErrorDataResult<Token>(result.Message);
 
-            UserForRegisterValidator validator = new UserForRegisterValidator();
-            ValidationResult validationResult = validator.Validate(userForRegisterDto);
+            //UserForRegisterValidator validator = new UserForRegisterValidator();
+            //ValidationResult validationResult = validator.Validate(userForRegisterDto);
+
+            ValidationResult validationResult = _validator.Validate(userForRegisterDto);
 
             if (!validationResult.IsValid)
                 return new ErrorDataResult<Token>(validationResult.Errors.FirstOrDefault().ErrorMessage);
@@ -120,9 +120,11 @@ namespace Business.Concrete
             _userDal.Create(newUser);
             var token = _tokenHelper.CreateToken(newUser);
 
-            return new SuccessDataResult<Token>(token,"Kayıt Başarılı");
+            return new SuccessDataResult<Token>(token, Messages.RegisterSuccess);
         }
 
+
+        #region Helpers
 
         private IResult CheckIfEmailNull(string email)
         {
@@ -151,6 +153,7 @@ namespace Business.Concrete
         }
 
 
+        #endregion
         #endregion
     }
 }

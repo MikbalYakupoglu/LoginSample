@@ -13,6 +13,8 @@ export class HomeComponent implements OnInit {
   isLogged: boolean;
 
   async ngOnInit(): Promise<void> {
-    this.isLogged = await this.authService.isAuthenticated();
+    this.authService.isAuthenticated().then((res) => {
+        this.isLogged = res;      
+    });
   }
 }

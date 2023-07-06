@@ -1,22 +1,21 @@
-﻿using Business.Abstract;
-using Business.Utils;
-using Core.Results;
-using Core.Utils;
+﻿using Entity.DTOs;
 using Entity;
-using Entity.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using Business.Abstract;
+using Business.Utils;
+using Core.Utils;
 
 namespace LoginSampleAPI.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class AuthController : ControllerBase
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        public AuthController(IUserService userService)
         {
             _userService = userService;
         }
@@ -52,50 +51,12 @@ namespace LoginSampleAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPost("remove")]
-        [Authorize]
-        public IActionResult Remove(UserDto userDto)
-        {
-            var result = _userService.Remove(userDto.Id);
-
-            if (!result.Success)
-                return BadRequest(result);
-
-            return Ok(result);
-        }
-
-        [HttpGet("getall")]
-        [Authorize]
-        public IActionResult GetAll(int id)
-        {
-            var result = _userService.GetAllUsers();
-
-            if (!result.Success)
-                return BadRequest(result);
-
-            return Ok(result);
-        }
-
-        [HttpGet("get")]
-        [Authorize]
-        public IActionResult Get()
-        {
-            var email = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var result = _userService.GetUser(email);
-
-            if (!result.Success)
-                return BadRequest(result);
-
-            return Ok(result);
-        }
-
         [HttpGet("verify")]
         [Authorize]
         public IActionResult VerifyToken()
         {
             return Ok();
         }
-
 
 
 

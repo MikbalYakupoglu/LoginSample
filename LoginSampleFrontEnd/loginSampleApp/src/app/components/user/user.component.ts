@@ -23,7 +23,6 @@ export class UserComponent implements OnInit{
 
   getUser(){
     this.userService.getUser().subscribe((res) => {
-      console.log(res.data);
       this.userModel = res.data;
       this.isCompleted = true;
     })    
@@ -31,7 +30,6 @@ export class UserComponent implements OnInit{
 
   remove(){
     this.userService.remove(this.userModel).subscribe((res) => {
-      console.log(res);
       alert(res.message);
       this.userService.logout();
       this.router.navigate(['main']);
