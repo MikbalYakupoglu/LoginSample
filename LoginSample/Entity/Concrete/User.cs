@@ -15,5 +15,7 @@ namespace Entity.Concrete
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
         public string Phone { get; set; }
+
+        public List<UserRole> UserRoles { get; set; }
     }
 }

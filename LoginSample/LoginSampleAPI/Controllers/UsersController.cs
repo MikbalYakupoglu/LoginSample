@@ -1,5 +1,7 @@
 ﻿using Business.Abstract;
 using Entity.DTOs;
+using LoginSampleAPI.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -30,7 +32,7 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize]
+        [Authorize(Roles = AuthorizationRoles.Admin)]
         public IActionResult GetAll()
         {
             var result = _userService.GetAllUsers();

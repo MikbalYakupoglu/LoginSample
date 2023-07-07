@@ -21,11 +21,10 @@ builder.Services.AddDbContext<LoginSampleContext>();
 builder.Services.AddAutoMapper(typeof(UserProfile));
 
 builder.Services.AddScoped<IUserDal, EfUserDal>();
+builder.Services.AddScoped<IUserRolesDal, EfUserRoles>();
 builder.Services.AddScoped<IUserService, UserService>();
-
-builder.Services.AddSingleton<ITokenHelper, JWTHelper>();
-builder.Services.AddSingleton<UserForRegisterValidator>();
-
+builder.Services.AddScoped<ITokenHelper, JWTHelper>();
+builder.Services.AddScoped<UserForRegisterValidator>();
 
 builder.Services.AddAuthentication(options =>
 {
@@ -39,9 +38,9 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = false,   
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,   
         ValidateIssuerSigningKey = true
     };
 });

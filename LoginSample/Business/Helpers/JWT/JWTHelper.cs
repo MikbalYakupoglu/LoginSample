@@ -1,4 +1,5 @@
-﻿using Entity.Concrete;
+﻿using DataAccess.Abstract;
+using Entity.Concrete;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -14,31 +15,29 @@ namespace Business.Helpers.JWT
     public class JWTHelper : ITokenHelper
     {
         private readonly IConfiguration _configuration;
-        public JWTHelper(IConfiguration configuration)
+        private readonly IUserRolesDal _userRolesDal;
+        public JWTHelper(IConfiguration configuration, IUserRolesDal userRolesDal)
         {
             _configuration = configuration;
+            _userRolesDal = userRolesDal;
         }
         public Token CreateToken(User user)
         {
+            List<Claim> claims = GetClaims(user);
+
             var issuer = _configuration["Jwt:Issuer"];
             var audience = _configuration["Jwt:Audience"];
             var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-            {
-                new Claim("Id", Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Name, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
-             }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(1),
                 Issuer = issuer,
                 Audience = audience,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha512Signature)
             };
+
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -51,6 +50,24 @@ namespace Business.Helpers.JWT
             };
 
             return TokenEntity;
+        }
+
+        private List<Claim> GetClaims(User user)
+        {
+            var userRoles = _userRolesDal.GetUserRoles(user.Id);
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim("Id", Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Name, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+            };
+
+            foreach (var userRole in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole));
+            }
+
+            return claims;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Entity.Concrete;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace DataAccess
 {
@@ -8,6 +9,19 @@ namespace DataAccess
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<User>().HasQueryFilter(u => u.IsActive);
+            modelBuilder.Entity<UserRole>().HasQueryFilter(ur => ur.User.IsActive);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRoles)
+                .HasForeignKey(ur => ur.UserId);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany()
+                .HasForeignKey(ur => ur.RoleId);
+
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -18,5 +32,7 @@ namespace DataAccess
 
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
     }
 }

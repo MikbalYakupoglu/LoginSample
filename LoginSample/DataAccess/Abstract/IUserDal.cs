@@ -12,6 +12,6 @@ namespace DataAccess.Abstract
 {
     public interface IUserDal : IEntityRepositoryBase<User>
     {
-        //void AddRoleToUser(User user, Role role);
+
     }
 }
