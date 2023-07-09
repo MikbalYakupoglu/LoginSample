@@ -23,10 +23,15 @@ builder.Services.AddAutoMapper(typeof(UserProfile));
 builder.Services.AddScoped<IUserDal, EfUserDal>();
 builder.Services.AddScoped<IUserRoleDal, EfUserRolesDal>();
 builder.Services.AddScoped<IRoleDal, EfRoleDal>();
+builder.Services.AddScoped<ICategoryDal, EfCategoryDal>();
+builder.Services.AddScoped<IArticleDal, EfArticleDal>();
+
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+//builder.Services.AddScoped<IArticleService, ArticleService>();
 
 builder.Services.AddScoped<ITokenHelper, JWTHelper>();
 builder.Services.AddScoped<UserForRegisterValidator>();

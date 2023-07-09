@@ -76,7 +76,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<Token>(validationResult.Errors.FirstOrDefault().ErrorMessage);
 
             _userDal.Create(newUser);
-
+            // Create Reader role.
             _userRoleDal.Create(new UserRole
             {
                 User = newUser,

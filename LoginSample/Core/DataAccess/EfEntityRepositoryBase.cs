@@ -41,6 +41,9 @@ namespace Core.DataAccess
         {
             using (var context = new TContext())
             {
+                if (!context.Set<TEntity>().Any())
+                    return Enumerable.Empty<TEntity>();
+
                 return filter == null
                     ? context.Set<TEntity>().AsNoTrackingWithIdentityResolution().ToList()
                     : context.Set<TEntity>().Where(filter).AsNoTrackingWithIdentityResolution().ToList();
@@ -51,6 +54,9 @@ namespace Core.DataAccess
         {
             using (var context = new TContext())
             {
+                if (!context.Set<TEntity>().Any())
+                    return Enumerable.Empty<TEntity>();
+
                 return filter == null
                     ? context.Set<TEntity>().ToPaginate(page, size)
                     : context.Set<TEntity>().Where(filter).ToPaginate(page, size);

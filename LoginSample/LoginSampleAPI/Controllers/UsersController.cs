@@ -24,7 +24,7 @@ namespace LoginSampleAPI.Controllers
         }
 
 
-        [HttpPost("delete")]
+        [HttpDelete("delete")]
         [Authorize]
         public IActionResult Delete(UserDto userDto)
         {
@@ -41,7 +41,7 @@ namespace LoginSampleAPI.Controllers
         public IActionResult GetLoginedUser()
         {
             var id = User.FindFirstValue(JwtRegisteredClaimNames.Name);
-            var result = _userService.GetUser(int.Parse(id ?? throw new ArgumentNullException()));
+            var result = _userService.GetById(int.Parse(id ?? throw new ArgumentNullException()));
 
             if (!result.Success)
                 return BadRequest(result);
@@ -53,7 +53,7 @@ namespace LoginSampleAPI.Controllers
         [Authorize(Roles = AuthorizationRoles.Admin)]
         public IActionResult GetUser(int id)
         {
-            var result = _userService.GetUser(id);
+            var result = _userService.GetById(id);
 
             if (!result.Success)
                 return BadRequest(result);

@@ -20,7 +20,7 @@ namespace Business.Concrete
             _mapper = mapper;
         }
 
-        public IDataResult<UserDto> GetUser(int id)
+        public IDataResult<UserDto> GetById(int id)
         {
             var user = _userDal.Get(u => u.Id == id);
 
@@ -29,7 +29,7 @@ namespace Business.Concrete
 
             return new SuccessDataResult<UserDto>(_mapper.Map<User, UserDto>(user));
         }
-        public IDataResult<UserDto> GetUser(string email)
+        public IDataResult<UserDto> GetByEmail(string email)
         {
             var user = _userDal.Get(u => u.Email == email);
 
@@ -43,9 +43,6 @@ namespace Business.Concrete
         {
             var users = _userDal.GetAll(null,page,size);
 
-            if (!users.Any())
-                return new ErrorDataResult<IEnumerable<UserDto>>(Messages.UserNotFound);
-
             return new SuccessDataResult<IEnumerable<UserDto>>(_mapper.Map<IEnumerable<User>, IEnumerable<UserDto>> (users));       
         }
 
@@ -56,7 +53,6 @@ namespace Business.Concrete
             if (userToDelete == null)
                 return new ErrorResult(Messages.IdNotFound);
 
-            userToDelete.IsActive = false;
             _userDal.Delete(userToDelete);
             return new SuccessResult(Messages.RemoveSuccess);
         }

@@ -26,6 +26,15 @@
         //Role
         public const string RoleNotFound = "Rol Bulunamadı.";
 
+        //Category
+        public const string CategoryCreateSuccess = "Kategori Başarıyla Oluşturuldu.";
+        public const string CategoryDeleteSuccess = "Kategori Başarıyla Silindi.";
+        public const string CategoryUpdateSuccess = "Kategori Başarıyla Güncellendi.";
+        public const string CategoryAlreadyExist = "Rol Bulunamadı.";
+        public const string CategoryNotFound = "Kategori Bulunamadı.";
+        public const string CategoryNameCannotBeNull = "Kategori Adı Boş Olamaz.";
+
+
 
     }
 }

@@ -21,8 +21,10 @@ namespace DataAccess.Concrete
         {
             using (LoginSampleContext context = new LoginSampleContext())
             {
-                var userToAdd = context.Entry(user);
-                userToAdd.State = EntityState.Modified;
+                user.IsActive = false;
+
+                var userToDelete = context.Entry(user);
+                userToDelete.State = EntityState.Modified;
                 context.SaveChanges();
             }
         }
@@ -44,6 +46,9 @@ namespace DataAccess.Concrete
                 var users = context.Users
                     .Include(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role);
+
+                if (!users.Any())
+                    return Enumerable.Empty<User>();
 
                 return filter == null
                     ? users.ToPaginate(page,size)
