@@ -14,7 +14,8 @@ namespace Core.DataAccess
         void Create(T entity);
         void Delete(T entity);
         void Update(T entity);
-        T Get(Expression<Func<T, bool>> filter);
+        T? Get(Expression<Func<T, bool>> filter);
         IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,int page = 0, int size = 25);
     }
 }

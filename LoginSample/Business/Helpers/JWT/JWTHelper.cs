@@ -15,8 +15,8 @@ namespace Business.Helpers.JWT
     public class JWTHelper : ITokenHelper
     {
         private readonly IConfiguration _configuration;
-        private readonly IUserRolesDal _userRolesDal;
-        public JWTHelper(IConfiguration configuration, IUserRolesDal userRolesDal)
+        private readonly IUserRoleDal _userRolesDal;
+        public JWTHelper(IConfiguration configuration, IUserRoleDal userRolesDal)
         {
             _configuration = configuration;
             _userRolesDal = userRolesDal;
@@ -57,9 +57,9 @@ namespace Business.Helpers.JWT
             var userRoles = _userRolesDal.GetUserRoles(user.Id);
             List<Claim> claims = new List<Claim>
             {
-                new Claim("Id", Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Name, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email)
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
             foreach (var userRole in userRoles)

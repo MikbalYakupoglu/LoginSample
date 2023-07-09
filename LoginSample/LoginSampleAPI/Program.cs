@@ -21,8 +21,13 @@ builder.Services.AddDbContext<LoginSampleContext>();
 builder.Services.AddAutoMapper(typeof(UserProfile));
 
 builder.Services.AddScoped<IUserDal, EfUserDal>();
-builder.Services.AddScoped<IUserRolesDal, EfUserRoles>();
+builder.Services.AddScoped<IUserRoleDal, EfUserRolesDal>();
+builder.Services.AddScoped<IRoleDal, EfRoleDal>();
+
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+
 builder.Services.AddScoped<ITokenHelper, JWTHelper>();
 builder.Services.AddScoped<UserForRegisterValidator>();
 

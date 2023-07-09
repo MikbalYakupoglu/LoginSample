@@ -11,5 +11,6 @@ namespace Entity.DTOs
         public int Id { get; init; }
         public string Email { get; init; }
         public string Phone { get; init; }
+        public List<string> Roles { get; set; }
     }
 }

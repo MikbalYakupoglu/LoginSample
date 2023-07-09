@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Entity.Abstract
 {
-    public interface IUserDto : IUser
+    public interface IUserDto
     {
+        public string Email { get; set; }
         public string Password { get; set; }
     }
 }

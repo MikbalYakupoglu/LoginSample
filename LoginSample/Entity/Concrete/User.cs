@@ -10,11 +10,11 @@ namespace Entity.Concrete
     public class User : IUser
     {
         public bool IsActive { get; set; }
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
 
         public List<UserRole> UserRoles { get; set; }
     }

@@ -1,4 +1,6 @@
-﻿using DataAccess.Abstract;
+﻿using Core.DataAccess;
+using DataAccess.Abstract;
+using Entity.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
-    public class EfUserRoles : IUserRolesDal
+    public class EfUserRolesDal : EfEntityRepositoryBase<UserRole, LoginSampleContext>,IUserRoleDal
     {
         public List<string> GetUserRoles(int userId)
         {

@@ -1,4 +1,6 @@
 ﻿using Core.DataAccess;
+using Core.DataAccess.Extensions;
+using Core.Entity;
 using DataAccess.Abstract;
 using Entity.Abstract;
 using Entity.Concrete;
@@ -22,6 +24,30 @@ namespace DataAccess.Concrete
                 var userToAdd = context.Entry(user);
                 userToAdd.State = EntityState.Modified;
                 context.SaveChanges();
+            }
+        }
+        public override User? Get(Expression<Func<User, bool>> filter)
+        {
+            using (LoginSampleContext context = new LoginSampleContext())
+            {
+                return context.Users
+                    .Include(u=> u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                    .SingleOrDefault(filter);
+            }
+        }
+
+        public override IEnumerable<User> GetAll(Expression<Func<User, bool>> filter = null, int page = 0, int size = 25)
+        {
+            using (LoginSampleContext context = new LoginSampleContext())
+            {
+                var users = context.Users
+                    .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role);
+
+                return filter == null
+                    ? users.ToPaginate(page,size)
+                    : users.Where(filter).ToPaginate(page, size);
             }
         }
     }

@@ -1,11 +1,7 @@
-﻿using Core.Entity;
+﻿using Core.DataAccess.Extensions;
+using Core.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.DataAccess
 {
@@ -33,21 +29,31 @@ namespace Core.DataAccess
             }
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> filter)
+        public virtual TEntity? Get(Expression<Func<TEntity, bool>> filter)
         {
             using (var context = new TContext())
             {
                 return context.Set<TEntity>().SingleOrDefault(filter);
             }
         }
-
+        // GetAll for check if role exist
         public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
             using (var context = new TContext())
             {
                 return filter == null
-                    ? context.Set<TEntity>().ToList()
-                    : context.Set<TEntity>().Where(filter).ToList();
+                    ? context.Set<TEntity>().AsNoTrackingWithIdentityResolution().ToList()
+                    : context.Set<TEntity>().Where(filter).AsNoTrackingWithIdentityResolution().ToList();
+            }
+        }
+
+        public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, int page = 0, int size = 25)
+        {
+            using (var context = new TContext())
+            {
+                return filter == null
+                    ? context.Set<TEntity>().ToPaginate(page, size)
+                    : context.Set<TEntity>().Where(filter).ToPaginate(page, size);
             }
         }
 

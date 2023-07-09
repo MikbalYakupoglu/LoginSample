@@ -1,6 +1,5 @@
 ﻿using Entity.DTOs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Business.Abstract;
 using Business.Utils;
@@ -13,11 +12,11 @@ namespace LoginSampleAPI.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public AuthController(IUserService userService)
+        public AuthController(IAuthService authService)
         {
-            _userService = userService;
+            _authService = authService;
         }
 
         [HttpPost("register")]
@@ -25,7 +24,7 @@ namespace LoginSampleAPI.Controllers
         public IActionResult Register(UserForRegisterDto userForRegisterDto)
         {
             User newUser = HashPasswordAndCreateUser(userForRegisterDto);
-            var result = _userService.Register(userForRegisterDto, newUser);
+            var result = _authService.Register(userForRegisterDto, newUser);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -39,7 +38,7 @@ namespace LoginSampleAPI.Controllers
         public IActionResult Login(UserForLoginDto userForLoginDto)
         {
             User userInDb;
-            var result = _userService.Login(userForLoginDto, out userInDb);
+            var result = _authService.Login(userForLoginDto, out userInDb);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -69,7 +68,7 @@ namespace LoginSampleAPI.Controllers
             {
                 IsActive = true,
                 Email = userForRegisterDto.Email,
-                Phone = userForRegisterDto.Phone,
+                Phone = userForRegisterDto.Phone ?? null,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt
             };
