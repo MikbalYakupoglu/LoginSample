@@ -6,19 +6,22 @@ using Business.Validation;
 using DataAccess;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
-using Entity.DTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddValidatorsFromAssemblyContaining<UserValidator<UserForRegisterDto>>();
+builder.Services.AddValidatorsFromAssemblyContaining<UserForRegisterValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<ArticleForCreateValidator>();
+
 builder.Services.AddDbContext<LoginSampleContext>();
 builder.Services.AddAutoMapper(typeof(UserProfile));
+builder.Services.AddAutoMapper(typeof(ArticleProfile));
+
 
 builder.Services.AddScoped<IUserDal, EfUserDal>();
 builder.Services.AddScoped<IUserRoleDal, EfUserRolesDal>();
@@ -31,7 +34,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-//builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IArticleService, ArticleService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+
 
 builder.Services.AddScoped<ITokenHelper, JWTHelper>();
 builder.Services.AddScoped<UserForRegisterValidator>();
@@ -82,6 +87,8 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();   
+app.MapControllers();
+
+app.UseMiddleware<GetLoginedUserMiddleware>();
 
 app.Run();

@@ -1,6 +1,7 @@
 ﻿using Entity.Concrete;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace DataAccess
 {
@@ -31,7 +32,9 @@ namespace DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=DESKTOP-BCSUV51;Database=LoginSample;Trusted_Connection=True;TrustServerCertificate=True");
+            optionsBuilder
+                .UseSqlServer(@"Server=DESKTOP-BCSUV51;Database=LoginSample;Trusted_Connection=True;TrustServerCertificate=True")
+                .LogTo(Console.WriteLine, LogLevel.Trace);
         }
 
 

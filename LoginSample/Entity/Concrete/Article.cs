@@ -16,12 +16,12 @@ namespace Entity.Concrete
         public int Id { get; private set; }
         public string Title { get; set; } = "Başlık";
         public string Content { get; set; } = "İçerik";
-        public DateTime CreatedAt { get; private set; }
-
+        public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         [ForeignKey(nameof(User))] public int CreatorId { get; set; }
-        public User Creator { get; set; }
+        [ForeignKey(nameof(User))] public int? DeletedBy { get; set; }
 
+        public User? Creator { get; set; }
         List<Category> Categories { get; set; }
     }
 }

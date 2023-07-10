@@ -1,10 +1,14 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using Business.Abstract;
 using Business.Utils;
+using Core.Entity.Temp;
 using Core.Results;
+using Core.Utils;
 using DataAccess.Abstract;
 using Entity.Concrete;
 using Entity.DTOs;
+using Microsoft.IdentityModel.JsonWebTokens;
 
 namespace Business.Concrete
 {
@@ -12,12 +16,14 @@ namespace Business.Concrete
     {
         private readonly IUserDal _userDal;
         private readonly IMapper _mapper;
+        private readonly IUserRoleDal _userRoleDal;
 
 
-        public UserService(IUserDal userDal,IMapper mapper)
+        public UserService(IUserDal userDal,IMapper mapper, IUserRoleDal userRoleDal)
         {
             _userDal = userDal;
             _mapper = mapper;
+            _userRoleDal = userRoleDal;
         }
 
         public IDataResult<UserDto> GetById(int id)
@@ -48,13 +54,45 @@ namespace Business.Concrete
 
         public IResult Delete(int id)
         {
-            var userToDelete = _userDal.Get(u => id == u.Id);
+            var result = BusinessRules.Run(
+                CheckIfUserExistInDb(id),
+                CheckIfUserIsAdminOrUserOwner(id)
+            );
 
-            if (userToDelete == null)
-                return new ErrorResult(Messages.IdNotFound);
+            if (!result.Success)
+                return new ErrorResult(result.Message);
+
+            var userToDelete = _userDal.Get(u => id == u.Id);
 
             _userDal.Delete(userToDelete);
             return new SuccessResult(Messages.RemoveSuccess);
+        }
+
+        private int GetLoginedUserId()
+        {
+            var loginedUserId = LoginedUser.ClaimsPrincipal.FindFirstValue(JwtRegisteredClaimNames.Name);
+            return int.Parse(loginedUserId);
+        }
+
+        private IResult CheckIfUserIsAdminOrUserOwner(int userId)
+        {
+            var loginedUserId = GetLoginedUserId();
+
+            if (!_userRoleDal.GetUserRoles(loginedUserId).Contains(AuthorizationRoles.Admin)
+                && userId != loginedUserId)
+                return new ErrorResult(Messages.NotAllowedToDelete);
+
+            return new SuccessResult();
+        }
+
+        private IResult CheckIfUserExistInDb(int userId)
+        {
+            var user = _userDal.Get(u => u.Id == userId);
+
+            if (user == null)
+                return new ErrorResult(Messages.UserNotFound);
+
+            return new SuccessResult();
         }
     }
 }
