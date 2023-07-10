@@ -42,7 +42,8 @@ namespace DataAccess.Concrete
             using (LoginSampleContext context = new LoginSampleContext())
             {
                 var articles = context.Articles
-                    .Include(a => a.Creator);
+                    .Include(a => a.Creator)
+                    .OrderByDescending(filter => filter.CreatedAt);
 
                 if (!articles.Any())
                     return Enumerable.Empty<Article>();

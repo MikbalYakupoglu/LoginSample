@@ -27,14 +27,23 @@ namespace DataAccess
                 .HasForeignKey(ur => ur.RoleId);
 
 
+            modelBuilder.Entity<Article>().HasIndex(a => a.CreatedAt);
+            modelBuilder.Entity<Category>().HasIndex(c => c.Name);
+            modelBuilder.Entity<Role>().HasIndex(r => r.Name);
+            modelBuilder.Entity<User>().HasIndex(u => u.Email);
+            modelBuilder.Entity<UserRole>().HasIndex(ur => ur.UserId);
+
+
+
+
             base.OnModelCreating(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
-                .UseSqlServer(@"Server=DESKTOP-BCSUV51;Database=LoginSample;Trusted_Connection=True;TrustServerCertificate=True")
-                .LogTo(Console.WriteLine, LogLevel.Trace);
+                .UseSqlServer(@"Server=DESKTOP-BCSUV51;Database=LoginSample;Trusted_Connection=True;TrustServerCertificate=True");
+            //.LogTo(Console.WriteLine, LogLevel.Trace);
         }
 
 
