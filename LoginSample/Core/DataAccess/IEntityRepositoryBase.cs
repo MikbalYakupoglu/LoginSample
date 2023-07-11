@@ -11,11 +11,11 @@ namespace Core.DataAccess
     public interface IEntityRepositoryBase<T> 
         where T : class, IEntity, new()
     {
-        void Create(T entity);
-        void Delete(T entity);
-        void Update(T entity);
-        T? Get(Expression<Func<T, bool>> filter);
-        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null);
-        IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null,int page = 0, int size = 25);
+        Task CreateAsync(T entity);
+        Task DeleteAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task<T?> GetAsync(Expression<Func<T, bool>> filter);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null);
+        Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null,int page = 0, int size = 25);
     }
 }

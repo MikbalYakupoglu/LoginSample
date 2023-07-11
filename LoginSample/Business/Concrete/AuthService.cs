@@ -46,7 +46,7 @@ namespace Business.Concrete
                 return new ErrorDataResult<Token>(result.Message);
             }
 
-            var _userInDb = _userDal.Get(u => u.Email == userForLoginDto.Email);
+            var _userInDb = _userDal.GetAsync(u => u.Email == userForLoginDto.Email).Result;
             if (_userInDb == null)
             {
                 userInDb = null;
@@ -75,12 +75,12 @@ namespace Business.Concrete
             if (!validationResult.IsValid)
                 return new ErrorDataResult<Token>(validationResult.Errors.FirstOrDefault().ErrorMessage);
 
-            _userDal.Create(newUser);
-            // Create Reader role.
-            _userRoleDal.Create(new UserRole
+            _userDal.CreateAsync(newUser);
+            // CreateAsync Reader role.
+            _userRoleDal.CreateAsync(new UserRole
             {
                 User = newUser,
-                Role = _roleDal.Get(r => r.Name == AuthorizationRoles.Reader)
+                Role = _roleDal.GetAsync(r => r.Name == AuthorizationRoles.Reader).Result
 
             });
 
@@ -108,7 +108,7 @@ namespace Business.Concrete
 
         private IResult CheckIfUserMailAlreadyExist(string email)
         {
-            var user = _userDal.Get(u => u.Email == email);
+            var user = _userDal.GetAsync(u => u.Email == email).Result;
             if (user != null)
                 return new ErrorResult(Messages.UserAlreadyExists);
 

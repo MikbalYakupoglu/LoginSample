@@ -54,7 +54,7 @@ namespace Business.Helpers.JWT
 
         private List<Claim> GetClaims(User user)
         {
-            var userRoles = _userRolesDal.GetUserRoles(user.Id);
+            var userRoles = _userRolesDal.GetUserRolesAsync(user.Id).Result;
             List<Claim> claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Name, user.Id.ToString()),

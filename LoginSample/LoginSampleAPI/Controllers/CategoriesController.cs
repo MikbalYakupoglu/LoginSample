@@ -20,9 +20,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create(Category category)
+        public async Task<IActionResult> Create(Category category)
         {
-            var result = _categoryService.Create(category);
+            var result = await _categoryService.CreateAsync(category);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -31,9 +31,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete(int categoryId)
+        public async Task<IActionResult> Delete(int categoryId)
         {
-            var result = _categoryService.Delete(categoryId);
+            var result = await _categoryService.DeleteAsync(categoryId);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -42,9 +42,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpPatch("update")]
-        public IActionResult Update(int categoryId, Category newCategory)
+        public async Task<IActionResult> Update(int categoryId, Category newCategory)
         {
-            var result = _categoryService.Update(categoryId, newCategory);
+            var result = await _categoryService.UpdateAsync(categoryId, newCategory);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -53,9 +53,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = _categoryService.GetAll();
+            var result = await _categoryService.GetAllAsync();
 
             if (!result.Success)
                 return BadRequest(result);
@@ -64,9 +64,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpGet("get")]
-        public IActionResult Get(int categoryId)
+        public async Task<IActionResult> Get(int categoryId)
         {
-            var result = _categoryService.GetById(categoryId);
+            var result = await _categoryService.GetByIdAsync(categoryId);
 
             if (!result.Success)
                 return BadRequest(result);

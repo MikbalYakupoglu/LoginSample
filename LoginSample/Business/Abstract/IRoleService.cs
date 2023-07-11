@@ -6,10 +6,10 @@ namespace Business.Abstract;
 
 public interface IRoleService
 {
-    IResult Create(Role role);
-    IResult Delete(int roleId);
-    IResult Update(int roleId, Role newRole);
-    IDataResult<Role> Get(int roleId);
-    IDataResult<IEnumerable<Role>> GetAll();
+    Task<IResult> CreateAsync(Role role);
+    Task<IResult> DeleteAsync(int roleId);
+    Task<IResult> UpdateAsync(int roleId, Role newRole);
+    Task<IDataResult<Role>> GetAsync(int roleId);
+    Task<IDataResult<IEnumerable<Role>>> GetAllAsync();
 
 }

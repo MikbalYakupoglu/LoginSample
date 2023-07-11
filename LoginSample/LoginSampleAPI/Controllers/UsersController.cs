@@ -27,9 +27,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpDelete("delete")]
         [Authorize]
-        public IActionResult Delete(UserDto userDto)
+        public async Task<IActionResult> Delete(UserDto userDto)
         {
-            var result = _userService.Delete(userDto.Id);
+            var result = await _userService.DeleteAsync(userDto.Id);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -39,10 +39,10 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("getlogineduser")]
         [Authorize]
-        public IActionResult GetLoginedUser()
+        public async Task<IActionResult> GetLoginedUser()
         {
             var id = User.FindFirstValue(JwtRegisteredClaimNames.Name);
-            var result = _userService.GetById(int.Parse(id ?? throw new ArgumentNullException()));
+            var result = await _userService.GetByIdAsync(int.Parse(id ?? throw new ArgumentNullException()));
 
             if (!result.Success)
                 return BadRequest(result);
@@ -52,9 +52,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("get")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
-        public IActionResult GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
-            var result = _userService.GetById(id);
+            var result = await _userService.GetByIdAsync(id);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -64,9 +64,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("getall")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
-        public IActionResult GetAll(int page = 0, int size = 25)
+        public async Task<IActionResult> GetAll(int page = 0, int size = 25)
         {
-            var result = _userService.GetAllUsers(page,size);
+            var result = await _userService.GetAllUsersAsync(page, size);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -76,9 +76,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpPost("addrole")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
-        public IActionResult AddRole([FromForm]int userId,[FromForm] int[] roleIds)
+        public async Task<IActionResult> AddRole([FromForm] int userId, [FromForm] int[] roleIds)
         {
-            var result = _userRoleService.AddRoleToUser(userId, roleIds.ToList());
+            var result = await _userRoleService.AddRoleToUserAsync(userId, roleIds.ToList());
 
             if (!result.Success)
                 return BadRequest(result);
@@ -88,9 +88,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpPost("removerole")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
-        public IActionResult RemoveRole([FromForm]int userId,[FromForm] int[] roleIds)
+        public async Task<IActionResult> RemoveRole([FromForm] int userId, [FromForm] int[] roleIds)
         {
-            var result = _userRoleService.RemoveRoleFromUser(userId, roleIds.ToList());
+            var result = await _userRoleService.RemoveRoleFromUserAsync(userId, roleIds.ToList());
 
             if (!result.Success)
                 return BadRequest(result);

@@ -26,18 +26,18 @@ namespace Business.Concrete
             _userRoleDal = userRoleDal;
         }
 
-        public IDataResult<UserDto> GetById(int id)
+        public async Task<IDataResult<UserDto>> GetByIdAsync(int id)
         {
-            var user = _userDal.Get(u => u.Id == id);
+            var user = await _userDal.GetAsync(u => u.Id == id);
 
             if (user == null)
                 return new ErrorDataResult<UserDto>(Messages.UserNotFound);
 
             return new SuccessDataResult<UserDto>(_mapper.Map<User, UserDto>(user));
         }
-        public IDataResult<UserDto> GetByEmail(string email)
+        public async Task<IDataResult<UserDto>> GetByEmailAsync(string email)
         {
-            var user = _userDal.Get(u => u.Email == email);
+            var user = await _userDal.GetAsync(u => u.Email == email);
 
             if (user == null)
                 return new ErrorDataResult<UserDto>(Messages.UserNotFound);
@@ -45,26 +45,26 @@ namespace Business.Concrete
             return new SuccessDataResult<UserDto>(_mapper.Map<User, UserDto>(user));
         }
 
-        public IDataResult<IEnumerable<UserDto>> GetAllUsers(int page, int size)
+        public async Task<IDataResult<IEnumerable<UserDto>>> GetAllUsersAsync(int page, int size)
         {
-            var users = _userDal.GetAll(null,page,size);
+            var users = await _userDal.GetAllAsync(null,page,size);
 
             return new SuccessDataResult<IEnumerable<UserDto>>(_mapper.Map<IEnumerable<User>, IEnumerable<UserDto>> (users));       
         }
 
-        public IResult Delete(int id)
+        public async Task<IResult> DeleteAsync(int id)
         {
             var result = BusinessRules.Run(
-                CheckIfUserExistInDb(id),
+                await CheckIfUserExistInDbAsync(id),
                 CheckIfUserIsAdminOrUserOwner(id)
             );
 
             if (!result.Success)
                 return new ErrorResult(result.Message);
 
-            var userToDelete = _userDal.Get(u => id == u.Id);
+            var userToDelete = await _userDal.GetAsync(u => id == u.Id);
 
-            _userDal.Delete(userToDelete);
+            await _userDal.DeleteAsync(userToDelete);
             return new SuccessResult(Messages.RemoveSuccess);
         }
 
@@ -78,16 +78,16 @@ namespace Business.Concrete
         {
             var loginedUserId = GetLoginedUserId();
 
-            if (!_userRoleDal.GetUserRoles(loginedUserId).Contains(AuthorizationRoles.Admin)
+            if (!_userRoleDal.GetUserRolesAsync(loginedUserId).Result.Contains(AuthorizationRoles.Admin)
                 && userId != loginedUserId)
                 return new ErrorResult(Messages.NotAllowedToDelete);
 
             return new SuccessResult();
         }
 
-        private IResult CheckIfUserExistInDb(int userId)
+        private async Task<IResult >CheckIfUserExistInDbAsync(int userId)
         {
-            var user = _userDal.Get(u => u.Id == userId);
+            var user = await _userDal.GetAsync(u => u.Id == userId);
 
             if (user == null)
                 return new ErrorResult(Messages.UserNotFound);

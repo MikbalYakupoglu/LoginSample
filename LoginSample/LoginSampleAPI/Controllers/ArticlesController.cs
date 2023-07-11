@@ -20,9 +20,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpPost("create")]
         [Authorize(Roles = $"{AuthorizationRoles.Admin},{AuthorizationRoles.Writer}")]
-        public IActionResult Create(ArticleDto articleDto)
+        public async Task<IActionResult> Create(ArticleDto articleDto)
         {
-            var result = _articleService.Create(articleDto);
+            var result = await _articleService.CreateAsync(articleDto);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -32,9 +32,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpDelete("delete")]
         [Authorize(Roles = $"{AuthorizationRoles.Admin},{AuthorizationRoles.Writer}")]
-        public IActionResult Delete(int articleId)
+        public async Task<IActionResult> Delete(int articleId)
         {
-            var result = _articleService.Delete(articleId);
+            var result = await _articleService.DeleteAsync(articleId);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -44,9 +44,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpPatch("update")]
         [Authorize(Roles = $"{AuthorizationRoles.Admin},{AuthorizationRoles.Writer}")]
-        public IActionResult Update(int articleId,ArticleDto updatedArticle)
+        public async Task<IActionResult> Update(int articleId, ArticleDto updatedArticle)
         {
-            var result = _articleService.Update(articleId, updatedArticle);
+            var result = await _articleService.UpdateAsync(articleId, updatedArticle);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -56,9 +56,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("get")]
         [AllowAnonymous]
-        public IActionResult Get(int articleId)
+        public async Task<IActionResult> Get(int articleId)
         {
-            var result = _articleService.Get(articleId);
+            var result = await _articleService.GetAsync(articleId);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -69,9 +69,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("getall")]
         [AllowAnonymous]
-        public IActionResult GetAll(int page = 0, int size = 10)
+        public async Task<IActionResult> GetAll(int page = 0, int size = 10)
         {
-            var result = _articleService.GetAll(page,size);
+            var result = await _articleService.GetAllAsync(page, size);
 
             if (!result.Success)
                 return BadRequest(result);

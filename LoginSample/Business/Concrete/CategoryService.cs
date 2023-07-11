@@ -4,11 +4,6 @@ using Core.Results;
 using Core.Utils;
 using DataAccess.Abstract;
 using Entity.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -21,75 +16,76 @@ namespace Business.Concrete
             _categoryDal = categoryDal;
         }
 
-        public IResult Create(Category category)
+        public async Task<IResult> CreateAsync(Category category)
         {
             var result = BusinessRules.Run(
-                CheckIfCategoryNameAlreadyExist(category.Name),
+                await CheckIfCategoryNameAlreadyExistAsync(category.Name),
                 CheckIfCategoryNameNull(category.Name)
                 );
 
             if (!result.Success)
                 return new ErrorResult(result.Message);
 
-            _categoryDal.Create(category);
+            await _categoryDal.CreateAsync(category);
             return new SuccessResult(Messages.CategoryCreateSuccess);
 
         }
 
-        public IResult Delete(int categoryId)
+        public async Task<IResult> DeleteAsync(int categoryId)
         {
             var result = BusinessRules.Run(
-                CheckIfCategoryExistInDb(categoryId)
+                 await CheckIfCategoryExistInDb(categoryId)
                 );
 
             if(!result.Success)
                 return new ErrorResult(result.Message);
 
-            var categoryToDelete = _categoryDal.Get(c => c.Id == categoryId);
-            _categoryDal.Delete(categoryToDelete);
+            var categoryToDelete = await _categoryDal.GetAsync(c => c.Id == categoryId);
+            await _categoryDal.DeleteAsync(categoryToDelete);
             return new SuccessResult(Messages.CategoryDeleteSuccess);
         }
 
-        public IDataResult<IEnumerable<Category>> GetAll()
+        public async Task<IResult> UpdateAsync(int categoryId, Category newCategory)
         {
-            var categories = _categoryDal.GetAll(null);
+            var result = BusinessRules.Run(
+                await CheckIfCategoryExistInDb(categoryId)
+            );
+
+            if (!result.Success)
+                return new ErrorResult(result.Message);
+
+            var categoryToUpdate = await _categoryDal.GetAsync(c => c.Id == categoryId);
+            categoryToUpdate.Name = newCategory.Name;
+            await _categoryDal.UpdateAsync(categoryToUpdate);
+
+            return new SuccessResult(Messages.CategoryUpdateSuccess);
+        }
+
+        public async Task<IDataResult<IEnumerable<Category>>> GetAllAsync()
+        {
+            var categories = await _categoryDal.GetAllAsync(null);
 
             return new SuccessDataResult<IEnumerable<Category>>(categories);
 
         }
 
-        public IDataResult<Category> GetById(int categoryId)
+        public async Task<IDataResult<Category>> GetByIdAsync(int categoryId)
         {
             var result = BusinessRules.Run(
-                CheckIfCategoryExistInDb(categoryId)
+                await CheckIfCategoryExistInDb(categoryId)
             );
 
             if (!result.Success)
                 return new ErrorDataResult<Category>(result.Message);
 
-            var category = _categoryDal.Get(c => c.Id == categoryId);
+            var category = await _categoryDal.GetAsync(c => c.Id == categoryId);
             return new SuccessDataResult<Category>(category);
         }
 
-        public IResult Update(int categoryId, Category newCategory)
+
+        private async Task<IResult> CheckIfCategoryNameAlreadyExistAsync(string categoryName)
         {
-            var result = BusinessRules.Run(
-                CheckIfCategoryExistInDb(categoryId)
-                );
-
-            if (!result.Success)
-                return new ErrorResult(result.Message);
-
-            var categoryToUpdate = _categoryDal.Get(c => c.Id == categoryId);
-            categoryToUpdate.Name = newCategory.Name;
-            _categoryDal.Update(categoryToUpdate);
-
-            return new SuccessResult(Messages.CategoryUpdateSuccess);
-        }
-
-        private IResult CheckIfCategoryNameAlreadyExist(string categoryName)
-        {
-            var category = _categoryDal.Get(c => c.Name == categoryName);
+            var category = await _categoryDal.GetAsync(c => c.Name == categoryName);
 
             if (category != null)
                 return new ErrorResult(Messages.CategoryAlreadyExist);
@@ -97,9 +93,9 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
-        private IResult CheckIfCategoryExistInDb(int categoryId)
+        private async Task<IResult> CheckIfCategoryExistInDb(int categoryId)
         {
-            var category = _categoryDal.Get(c => c.Id == categoryId);
+            var category = await _categoryDal.GetAsync(c => c.Id == categoryId);
 
             if (category == null)
                 return new ErrorResult(Messages.CategoryNotFound);

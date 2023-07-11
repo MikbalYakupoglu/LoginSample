@@ -6,10 +6,10 @@ namespace Business.Abstract;
 
 public interface IArticleService
 {
-    IResult Create(ArticleDto article);
-    IResult Delete(int articleId);
-    IResult Update(int articleId, ArticleDto updatedArticle);
-    IDataResult<ArticleDto> Get(int articleId);
-    IDataResult<IEnumerable<ArticleDto>> GetAll(int page, int size);
+    Task<IResult> CreateAsync(ArticleDto article);
+    Task<IResult> DeleteAsync(int articleId);
+    Task<IResult> UpdateAsync(int articleId, ArticleDto updatedArticle);
+    Task<IDataResult<ArticleDto>> GetAsync(int articleId);
+    Task<IDataResult<IEnumerable<ArticleDto>>> GetAllAsync(int page, int size);
 
 }

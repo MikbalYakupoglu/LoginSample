@@ -17,52 +17,52 @@ public class RoleService : IRoleService
         _roleDal = roleDal;
     }
 
-    public IResult Create(Role role)
+    public async Task<IResult> CreateAsync(Role role)
     {
         var result = BusinessRules.Run(
             CheckIfInputsNull(role.Name),
-            CheckIfRoleAlreadyExist(role.Name)
+            await CheckIfRoleAlreadyExistAsync(role.Name)
         );
 
         if (!result.Success)
             return new ErrorResult(result.Message);
 
-        _roleDal.Create(role);
+        await _roleDal.CreateAsync(role);
         return new SuccessResult(Messages.RoleCreateSuccess);
     }
 
-    public IResult Delete(int roleId)
+    public async Task<IResult> DeleteAsync(int roleId)
     {
         var result = BusinessRules.Run(
-            CheckIfRoleExistInDbForModify(roleId)
+            await CheckIfRoleExistInDbForModifyAsync(roleId)
         );
 
         if (!result.Success)
             return new ErrorResult(result.Message);
 
-        var role = _roleDal.Get(r => r.Id == roleId);
-        _roleDal.Delete(role);
+        var role = await _roleDal.GetAsync(r => r.Id == roleId);
+        await _roleDal.DeleteAsync(role);
         return new SuccessResult(Messages.RoleDeleteSuccess);
     }
 
-    public IResult Update(int roleId, Role newRole)
+    public async Task<IResult> UpdateAsync(int roleId, Role newRole)
     {
         var result = BusinessRules.Run(
-            CheckIfRoleExistInDbForModify(roleId)
+            await CheckIfRoleExistInDbForModifyAsync(roleId)
         );
 
         if (!result.Success)
             return new ErrorResult(result.Message);
 
-        var role = _roleDal.Get(r => r.Id == roleId);
+        var role = await _roleDal.GetAsync(r => r.Id == roleId);
         role.Name = newRole.Name;
-        _roleDal.Update(role);
+        await _roleDal.UpdateAsync(role);
         return new SuccessResult(Messages.RoleUpdateSuccess);
     }
 
-    public IDataResult<Role> Get(int roleId)
+    public async Task<IDataResult<Role>> GetAsync(int roleId)
     {
-        var role = _roleDal.Get(r => r.Id == roleId);
+        var role = await _roleDal.GetAsync(r => r.Id == roleId);
 
         if (role == null)
             return new ErrorDataResult<Role>(Messages.RoleNotFound);
@@ -70,16 +70,16 @@ public class RoleService : IRoleService
         return new SuccessDataResult<Role>(role);
     }
 
-    public IDataResult<IEnumerable<Role>> GetAll()
+    public async Task<IDataResult<IEnumerable<Role>>> GetAllAsync()
     {
-        var roles = _roleDal.GetAll(null);
+        var roles = await _roleDal.GetAllAsync(null);
 
         return new SuccessDataResult<IEnumerable<Role>>(roles);
     }
 
-    private IResult CheckIfRoleAlreadyExist(string roleName)
+    private async Task<IResult> CheckIfRoleAlreadyExistAsync(string roleName)
     {
-        var role = _roleDal.Get(r => r.Name == roleName);
+        var role = await _roleDal.GetAsync(r => r.Name == roleName);
 
         if (role != null)
             return new ErrorResult(Messages.RoleAlreadyExist);
@@ -87,9 +87,9 @@ public class RoleService : IRoleService
         return new SuccessResult();
     }
 
-    private IResult CheckIfRoleExistInDbForModify(int roleId)
+    private async Task<IResult> CheckIfRoleExistInDbForModifyAsync(int roleId)
     {
-        var role = _roleDal.Get(r => r.Id == roleId);
+        var role = await _roleDal.GetAsync(r => r.Id == roleId);
 
         if (role == null)
             return new ErrorResult(Messages.RoleNotFound);

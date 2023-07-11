@@ -10,6 +10,6 @@ namespace DataAccess.Abstract
 {
     public interface IUserRoleDal : IEntityRepositoryBase<UserRole>
     {
-        List<string> GetUserRoles(int userId);
+        Task<List<string>> GetUserRolesAsync(int userId);
     }
 }

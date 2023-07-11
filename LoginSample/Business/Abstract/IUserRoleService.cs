@@ -9,8 +9,8 @@ namespace Business.Abstract
 {
     public interface IUserRoleService
     {
-        IResult AddRoleToUser(int userId, List<int> roleIds);
-        IResult RemoveRoleFromUser(int userId, List<int> roleIds);
+        Task<IResult> AddRoleToUserAsync(int userId, List<int> roleIds);
+        Task<IResult> RemoveRoleFromUserAsync(int userId, List<int> roleIds);
 
     }
 }

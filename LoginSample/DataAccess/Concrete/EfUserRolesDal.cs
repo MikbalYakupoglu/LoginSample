@@ -12,14 +12,14 @@ namespace DataAccess.Concrete
 {
     public class EfUserRolesDal : EfEntityRepositoryBase<UserRole, LoginSampleContext>,IUserRoleDal
     {
-        public List<string> GetUserRoles(int userId)
+        public async Task<List<string>> GetUserRolesAsync(int userId)
         {
             using (var context = new LoginSampleContext())
             {
-                var userWithRoles = context.Users
+                var userWithRoles = await context.Users
                     .Include(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role)
-                    .FirstOrDefault(u => u.Id == userId);
+                    .FirstOrDefaultAsync(u => u.Id == userId);
 
                 List<string> userRoles = new List<string>();
 

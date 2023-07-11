@@ -19,9 +19,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpPost("create")]
-        public IActionResult Create(Role role)
+        public async Task<IActionResult> Create(Role role)
         {
-            var result = _roleService.Create(role);
+            var result = await _roleService.CreateAsync(role);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -30,9 +30,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpDelete("delete")]
-        public IActionResult Delete(int roleId)
+        public async Task<IActionResult> Delete(int roleId)
         {
-            var result = _roleService.Delete(roleId);
+            var result = await _roleService.DeleteAsync(roleId);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -41,9 +41,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpPatch("update")]
-        public IActionResult Update(int roleId, Role newRole)
+        public async Task<IActionResult> Update(int roleId, Role newRole)
         {
-            var result = _roleService.Update(roleId, newRole);
+            var result = await _roleService.UpdateAsync(roleId, newRole);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -52,9 +52,9 @@ namespace LoginSampleAPI.Controllers
         }
 
         [HttpGet("getall")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var result = _roleService.GetAll();
+            var result = await _roleService.GetAllAsync();
 
             if (!result.Success)
                 return BadRequest(result);

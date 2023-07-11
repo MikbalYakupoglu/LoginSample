@@ -6,9 +6,9 @@ namespace Business.Abstract
 {
     public interface IUserService
     {
-        IDataResult<IEnumerable<UserDto>> GetAllUsers(int page, int size);
-        IDataResult<UserDto> GetById(int id);
-        IDataResult<UserDto> GetByEmail(string email);
-        IResult Delete(int id);
+        Task<IDataResult<IEnumerable<UserDto>>> GetAllUsersAsync(int page, int size);
+        Task<IDataResult<UserDto>> GetByIdAsync(int id);
+        Task<IDataResult<UserDto>> GetByEmailAsync(string email);
+        Task<IResult> DeleteAsync(int id);
     }
 }

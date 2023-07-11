@@ -9,67 +9,67 @@ namespace Core.DataAccess
         where TEntity : class, IEntity, new()
         where TContext : DbContext, new()
     {
-        public void Create(TEntity entity)
+        public async Task CreateAsync(TEntity entity)
         {
-            using (var context = new TContext())
+            await using (var context = new TContext())
             {
                 var entityToAdd = context.Entry(entity);
                 entityToAdd.State = EntityState.Added;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
-        public virtual void Delete(TEntity entity)
+        public virtual async Task DeleteAsync(TEntity entity)
         {
-            using (var context = new TContext())
+            await using (var context = new TContext())
             {
                 var entityToDelete = context.Entry(entity);
                 entityToDelete.State = EntityState.Deleted;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
-        public virtual TEntity? Get(Expression<Func<TEntity, bool>> filter)
+        public virtual async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> filter)
         {
-            using (var context = new TContext())
+            await using (var context = new TContext())
             {
-                return context.Set<TEntity>().SingleOrDefault(filter);
+                return await context.Set<TEntity>().SingleOrDefaultAsync(filter);
             }
         }
-        // GetAll for check if role exist
-        public IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
+        // GetAllAsync for check if role exist
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null)
         {
-            using (var context = new TContext())
-            {
-                if (!context.Set<TEntity>().Any())
-                    return Enumerable.Empty<TEntity>();
-
-                return filter == null
-                    ? context.Set<TEntity>().AsNoTrackingWithIdentityResolution().ToList()
-                    : context.Set<TEntity>().Where(filter).AsNoTrackingWithIdentityResolution().ToList();
-            }
-        }
-
-        public virtual IEnumerable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, int page = 0, int size = 25)
-        {
-            using (var context = new TContext())
+            await using (var context = new TContext())
             {
                 if (!context.Set<TEntity>().Any())
                     return Enumerable.Empty<TEntity>();
 
                 return filter == null
-                    ? context.Set<TEntity>().ToPaginate(page, size)
-                    : context.Set<TEntity>().Where(filter).ToPaginate(page, size);
+                    ? await context.Set<TEntity>().AsNoTrackingWithIdentityResolution().ToListAsync()
+                    : await context.Set<TEntity>().Where(filter).AsNoTrackingWithIdentityResolution().ToListAsync();
             }
         }
 
-        public void Update(TEntity entity)
+        public virtual async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>>? filter = null, int page = 0, int size = 25)
         {
-            using (var context = new TContext())
+            await using (var context = new TContext())
+            {
+                if (!context.Set<TEntity>().Any())
+                    return Enumerable.Empty<TEntity>();
+
+                return filter == null
+                    ? await context.Set<TEntity>().ToPaginateAsync(page, size)
+                    : await context.Set<TEntity>().Where(filter).ToPaginateAsync(page, size);
+            }
+        }
+
+        public async Task UpdateAsync(TEntity entity)
+        {
+            await using (var context = new TContext())
             {
                 var entityToUpdate = context.Entry(entity);
                 entityToUpdate.State = EntityState.Modified;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }

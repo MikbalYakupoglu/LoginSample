@@ -21,16 +21,16 @@ namespace Business.Concrete
         }
 
         // Kullanıcıda Zaten Eklenmek İstenen Rol Bulunmuyorsa ekle.
-        public IResult AddRoleToUser(int userId, List<int> roleIdsToAdd)
+        public async Task<IResult> AddRoleToUserAsync(int userId, List<int> roleIdsToAdd)
         {
             var result = BusinessRules.Run(
-                    CheckIfRolesExist(roleIdsToAdd)
+                    await CheckIfRolesExistAsync(roleIdsToAdd)
                 );
 
             if (!result.Success)
                 return new ErrorResult(result.Message);
 
-            int addedRoleCount = AddUserRoles(userId, roleIdsToAdd);
+            int addedRoleCount = await AddUserRolesAsync(userId, roleIdsToAdd);
 
             if (addedRoleCount == 0)
                 return new SuccessResult(Messages.UserRoleNotModified);
@@ -38,16 +38,17 @@ namespace Business.Concrete
             return new SuccessResult(Messages.UserRoleUpdateSuccess);
         }
 
-        private int AddUserRoles(int userId, List<int> roleIdsToAdd)
+        private async Task<int> AddUserRolesAsync(int userId, List<int> roleIdsToAdd)
         {
-            var userRoles = _userRoleDal.GetAll(ur => ur.UserId == userId).Select(ur => ur.RoleId).ToList();
+            var userRoles = await _userRoleDal.GetAllAsync(ur => ur.UserId == userId);
+            var userRolesIds = userRoles.Select(ur => ur.RoleId).ToList();
             int addedRoleCount = 0;
 
             foreach (var roleToAdd in roleIdsToAdd)
             {
-                if (!userRoles.Contains(roleToAdd))
+                if (!userRolesIds.Contains(roleToAdd))
                 {
-                    _userRoleDal.Create(new UserRole
+                    await _userRoleDal.CreateAsync(new UserRole
                     {
                         UserId = userId,
                         RoleId = roleToAdd
@@ -60,9 +61,9 @@ namespace Business.Concrete
         }
 
         // Kullanıcıda Silinmek İstenen Rol Bulunuyorsa Sil.
-        public IResult RemoveRoleFromUser(int userId, List<int> roleIdsToRemove)
+        public async Task<IResult> RemoveRoleFromUserAsync(int userId, List<int> roleIdsToRemove)
         {
-            int deletedRoleCount = RemoveUserRoles(userId, roleIdsToRemove);
+            int deletedRoleCount = await RemoveUserRolesAsync(userId, roleIdsToRemove);
 
             if (deletedRoleCount == 0)
                 return new SuccessResult(Messages.UserRoleNotModified);
@@ -70,16 +71,17 @@ namespace Business.Concrete
             return new SuccessResult(Messages.UserRoleUpdateSuccess);
         }
 
-        private int RemoveUserRoles(int userId, List<int> roleIdsToRemove)
+        private async Task<int> RemoveUserRolesAsync(int userId, List<int> roleIdsToRemove)
         {
-            var userRoles = _userRoleDal.GetAll(ur => ur.UserId == userId).Select(ur => ur.RoleId).ToList();
+            var userRoles = await _userRoleDal.GetAllAsync(ur => ur.UserId == userId);
+            var userRolesIds = userRoles.Select(ur => ur.RoleId).ToList();
             int deletedRoleCount = 0;
             foreach (var roleToDelete in roleIdsToRemove)
             {
-                if (userRoles.Contains(roleToDelete))
+                if (userRolesIds.Contains(roleToDelete))
                 {
-                    var userRoleToDelete = _userRoleDal.Get(ur => ur.UserId == userId && ur.RoleId == roleToDelete);
-                    _userRoleDal.Delete(userRoleToDelete);
+                    var userRoleToDelete = await _userRoleDal.GetAsync(ur => ur.UserId == userId && ur.RoleId == roleToDelete);
+                    await _userRoleDal.DeleteAsync(userRoleToDelete);
                     deletedRoleCount++;
                 }
             }
@@ -87,9 +89,10 @@ namespace Business.Concrete
             return deletedRoleCount;
         }
 
-        private IResult CheckIfRolesExist(List<int> roleIdsToAdd)
+        private async Task<IResult> CheckIfRolesExistAsync(List<int> roleIdsToAdd)
         {
-            var roleIds = _roleDal.GetAll(null).Select(r => r.Id);
+            var roles = await _roleDal.GetAllAsync(null);
+            var roleIds = roles.Select(r => r.Id);
             var isRolesCorrect = roleIdsToAdd.All(id => roleIds.Contains(id));
 
             if (!isRolesCorrect)

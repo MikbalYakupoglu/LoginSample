@@ -15,31 +15,31 @@ namespace DataAccess.Concrete
 {
     public class EfArticleDal : EfEntityRepositoryBase<Article, LoginSampleContext>, IArticleDal
     {
-        public override void Delete(Article article)
+        public override async Task DeleteAsync(Article article)
         {
-            using (LoginSampleContext context = new LoginSampleContext())
+            await using (LoginSampleContext context = new LoginSampleContext())
             {
                 article.IsDeleted = true;
 
                 var articleToDelete = context.Entry(article);
                 articleToDelete.State = EntityState.Modified;
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
 
-        public override Article? Get(Expression<Func<Article, bool>> filter)
+        public override async Task<Article?> GetAsync(Expression<Func<Article, bool>> filter)
         {
-            using (LoginSampleContext context = new LoginSampleContext())
+            await using (LoginSampleContext context = new LoginSampleContext())
             {
-                return context.Articles
+                return await context.Articles
                     .Include(a => a.Creator)
-                    .SingleOrDefault(filter);
+                    .SingleOrDefaultAsync(filter);
             }
         }
 
-        public override IEnumerable<Article> GetAll(Expression<Func<Article, bool>> filter = null, int page = 0, int size = 10)
+        public override async Task<IEnumerable<Article>> GetAllAsync(Expression<Func<Article, bool>>? filter = null, int page = 0, int size = 10)
         {
-            using (LoginSampleContext context = new LoginSampleContext())
+            await using (LoginSampleContext context = new LoginSampleContext())
             {
                 var articles = context.Articles
                     .Include(a => a.Creator)
@@ -49,8 +49,8 @@ namespace DataAccess.Concrete
                     return Enumerable.Empty<Article>();
 
                 return filter == null
-                    ? articles.ToPaginate(page, size)
-                    : articles.Where(filter).ToPaginate(page, size);
+                    ? await articles.ToPaginateAsync(page, size)
+                    : await articles.Where(filter).ToPaginateAsync(page, size);
             }
         }
     }

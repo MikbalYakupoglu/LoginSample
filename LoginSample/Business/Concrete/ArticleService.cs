@@ -29,7 +29,7 @@ public class ArticleService : IArticleService
         _mapper = mapper;
     }
 
-    public IResult Create(ArticleDto articleDto)
+    public async Task<IResult> CreateAsync(ArticleDto articleDto)
     {
         var result = BusinessRules.Run(
             CheckIfRequiredParametersNull(articleDto)
@@ -37,8 +37,9 @@ public class ArticleService : IArticleService
 
         if (!result.Success)
             return new ErrorResult(result.Message);
+                
 
-        ValidationResult validationResult = _validator.Validate(_mapper.Map<ArticleDto,Article>(articleDto));
+        ValidationResult validationResult = await _validator.ValidateAsync(_mapper.Map<ArticleDto,Article>(articleDto));
         if (!validationResult.IsValid)
             return new ErrorResult(validationResult.Errors.FirstOrDefault().ErrorMessage);
 
@@ -48,49 +49,49 @@ public class ArticleService : IArticleService
             Title = articleDto.Title,
             Content = articleDto.Content,
         };
-        _articleDal.Create(articleToAdd);
+        await _articleDal.CreateAsync(articleToAdd);
         return new SuccessResult(Messages.ArticleCreateSuccess);
     }
 
-    public IResult Delete(int articleId)
+    public async Task<IResult> DeleteAsync(int articleId)
     {
 
         var result = BusinessRules.Run(
-            CheckIfArticleExistInDb(articleId),
-            CheckIfCreatorOrAdminTryingToDelete(articleId)
+            await CheckIfArticleExistInDbAsync(articleId),
+            await CheckIfCreatorOrAdminTryingToDeleteAsync(articleId)
         );
 
         if (!result.Success)
             return new ErrorResult(result.Message);
 
-        var articleToDelete = _articleDal.Get(a => a.Id == articleId);
+        var articleToDelete = await _articleDal.GetAsync(a => a.Id == articleId);
         articleToDelete.DeletedBy = GetLoginedUserId();
-        _articleDal.Delete(articleToDelete);
+        await _articleDal.DeleteAsync(articleToDelete);
         return new SuccessResult(Messages.ArticleDeleteSuccess);
     }
 
-    public IResult Update(int articleId, ArticleDto updatedArticle)
+    public async Task<IResult> UpdateAsync(int articleId, ArticleDto updatedArticle)
     {
         var result = BusinessRules.Run(
-            CheckIfArticleExistInDb(articleId),
-            CheckIfCreatorTryingModify(articleId)
+            await CheckIfArticleExistInDbAsync(articleId),
+            await CheckIfCreatorTryingModifyAsync(articleId)
         );
 
         if (!result.Success)
             return new ErrorResult(result.Message);
 
-        var articleToUpdate = _articleDal.Get(a => a.Id == articleId);
+        var articleToUpdate = await _articleDal.GetAsync(a => a.Id == articleId);
         articleToUpdate.Title = updatedArticle.Title;
         articleToUpdate.Content = updatedArticle.Content;
         articleToUpdate.UpdatedAt = DateTime.Now;
 
-        _articleDal.Update(articleToUpdate);
+        await _articleDal.UpdateAsync(articleToUpdate);
         return new SuccessResult(Messages.ArticleUpdateSuccess);
     }
 
-    public IDataResult<ArticleDto> Get(int articleId)
+    public async Task<IDataResult<ArticleDto>> GetAsync(int articleId)
     {
-        var article = _articleDal.Get(a => a.Id == articleId);
+        var article = await _articleDal.GetAsync(a => a.Id == articleId);
 
         if (article == null)
             return new ErrorDataResult<ArticleDto>(Messages.ArticleNotFound);
@@ -98,9 +99,9 @@ public class ArticleService : IArticleService
         return new SuccessDataResult<ArticleDto>(_mapper.Map<Article, ArticleDto>(article));
     }
 
-    public IDataResult<IEnumerable<ArticleDto>> GetAll(int page = 0, int size = 10)
+    public async Task<IDataResult<IEnumerable<ArticleDto>>> GetAllAsync(int page = 0, int size = 10)
     {
-        var articles = _articleDal.GetAll(null, page, size);
+        var articles = await _articleDal.GetAllAsync(null, page, size);
 
         return new SuccessDataResult<IEnumerable<ArticleDto>>(_mapper.Map<IEnumerable<Article>, IEnumerable<ArticleDto>>(articles));
     }
@@ -116,9 +117,9 @@ public class ArticleService : IArticleService
         return new SuccessResult();
     }
 
-    private IResult CheckIfArticleExistInDb(int articleId)
+    private async Task<IResult> CheckIfArticleExistInDbAsync(int articleId)
     {
-        var article = _articleDal.Get(a => a.Id == articleId);
+        var article = await _articleDal.GetAsync(a => a.Id == articleId);
 
         if (article == null)
             return new ErrorResult(Messages.ArticleNotFound);
@@ -126,9 +127,9 @@ public class ArticleService : IArticleService
         return new SuccessResult();
     }
 
-    private IResult CheckIfCreatorTryingModify(int articleId)
+    private async Task<IResult> CheckIfCreatorTryingModifyAsync(int articleId)
     {
-        var article = _articleDal.Get(a => a.Id == articleId);
+        var article = await _articleDal.GetAsync(a => a.Id == articleId);
 
         if (article == null)
             return new ErrorResult(Messages.ArticleNotFound);
@@ -140,15 +141,15 @@ public class ArticleService : IArticleService
         return new SuccessResult();
     }
 
-    private IResult CheckIfCreatorOrAdminTryingToDelete(int articleId)
+    private async Task<IResult> CheckIfCreatorOrAdminTryingToDeleteAsync(int articleId)
     {
-        var article = _articleDal.Get(a => a.Id == articleId);
+        var article = await _articleDal.GetAsync(a => a.Id == articleId);
 
         if (article == null)
             return new ErrorResult(Messages.ArticleNotFound);
 
         var loginedUserId = GetLoginedUserId();
-        var loginedUserRoles = _userRoleDal.GetUserRoles(loginedUserId);
+        var loginedUserRoles = await _userRoleDal.GetUserRolesAsync(loginedUserId);
 
         if (!loginedUserRoles.Contains(AuthorizationRoles.Admin)
             && !IsLoginedUserTryingModify(article))
