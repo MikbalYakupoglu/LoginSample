@@ -3,15 +3,12 @@ import { LoginModel } from '../models/loginModel';
 import { Observable } from 'rxjs';
 import { TokenModel } from '../models/tokenModel';
 import { RegisterModel } from '../models/registerModel';
-import { HttpClient, HttpResponse, HttpStatusCode } from '@angular/common/http'
-import { ResultModel } from '../models/resultModel';
+import { HttpClient, HttpStatusCode } from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service';
-import { DatePipe } from '@angular/common';
-import { SingleResultModel } from '../models/singleResultModel';
-import { Token } from '@angular/compiler';
+import { SingleResponseModel } from '../models/singleResponseModel';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 })
 export class AuthService {
 
@@ -19,14 +16,14 @@ export class AuthService {
 
   apiUrl = 'https://localhost:7142/auth/';
 
-  login(loginModel:LoginModel) : Observable<SingleResultModel<TokenModel>>{
+  login(loginModel:LoginModel) : Observable<SingleResponseModel<TokenModel>>{
     let newPath = this.apiUrl + 'login';
-    return this.httpClient.post<SingleResultModel<TokenModel>>(newPath, loginModel);
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(newPath, loginModel);
   }
 
-  register(registerModel: RegisterModel) : Observable<SingleResultModel<TokenModel>>{
+  register(registerModel: RegisterModel) : Observable<SingleResponseModel<TokenModel>>{
     let newPath = this.apiUrl + 'register';
-    return this.httpClient.post<SingleResultModel<TokenModel>>(newPath, registerModel);
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(newPath, registerModel);
   }
 
   validateToken(){

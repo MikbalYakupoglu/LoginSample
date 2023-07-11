@@ -27,9 +27,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpDelete("delete")]
         [Authorize]
-        public async Task<IActionResult> Delete(UserDto userDto)
+        public async Task<IActionResult> Delete(int userId)
         {
-            var result = await _userService.DeleteAsync(userDto.Id);
+            var result = await _userService.DeleteAsync(userId);
 
             if (!result.Success)
                 return BadRequest(result);
@@ -52,9 +52,9 @@ namespace LoginSampleAPI.Controllers
 
         [HttpGet("get")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
-        public async Task<IActionResult> GetUser(int id)
+        public async Task<IActionResult> GetUser(int userId)
         {
-            var result = await _userService.GetByIdAsync(id);
+            var result = await _userService.GetByIdAsync(userId);
 
             if (!result.Success)
                 return BadRequest(result);

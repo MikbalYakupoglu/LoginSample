@@ -11,6 +11,10 @@ import { DatePipe } from '@angular/common';
 import { UserComponent } from './components/user/user.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HomeComponent } from './home/home.component';
+import { ArticleComponent } from './components/article/article.component';
+import { CategoryComponent } from './components/category/category.component';
+import { RoleComponent } from './components/role/role.component';
+import { UserManagementComponent } from './components/user-management/user-management.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +23,10 @@ import { HomeComponent } from './home/home.component';
     RegisterComponent,
     UserComponent,
     HomeComponent,
+    ArticleComponent,
+    CategoryComponent,
+    RoleComponent,
+    UserManagementComponent,
   ],
   imports: [
     BrowserModule,

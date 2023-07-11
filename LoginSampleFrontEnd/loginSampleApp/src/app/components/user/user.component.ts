@@ -22,14 +22,14 @@ export class UserComponent implements OnInit{
   }
 
   getUser(){
-    this.userService.getUser().subscribe((res) => {
+    this.userService.getLoginedUser().subscribe((res) => {
       this.userModel = res.data;
       this.isCompleted = true;
     })    
   }
 
   delete(){
-    this.userService.delete(this.userModel).subscribe((res) => {
+    this.userService.deleteUser(this.userModel.id).subscribe((res) => {
       alert(res.message);
       this.userService.logout();
       this.router.navigate(['main']);

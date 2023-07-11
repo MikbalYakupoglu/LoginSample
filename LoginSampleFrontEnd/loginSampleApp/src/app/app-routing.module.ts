@@ -8,12 +8,14 @@ import { loginGuard } from './guards/login.guard';
 import { NotFoundError } from 'rxjs';
 import { alreadyLoginedGuard } from './guards/already-logined.guard';
 import { HomeComponent } from './home/home.component';
+import { CategoryComponent } from './components/category/category.component';
 
 const routes:Routes = [
   {path:"home", component: HomeComponent},
   {path:"login", component:LoginComponent, canActivate:[alreadyLoginedGuard]},
   {path:"register", component:RegisterComponent, canActivate:[alreadyLoginedGuard]},
   {path:"user", component:UserComponent, canActivate:[loginGuard]},
+  {path:"categories", component:CategoryComponent, canActivate:[loginGuard]},
   {path:'', redirectTo:'/home', pathMatch: 'full'},
 ]
 
