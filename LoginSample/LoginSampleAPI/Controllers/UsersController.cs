@@ -76,7 +76,7 @@ namespace LoginSampleAPI.Controllers
 
         [HttpPost("addrole")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
-        public async Task<IActionResult> AddRole([FromForm] int userId, [FromForm] int[] roleIds)
+        public async Task<IActionResult> AddRole(int userId,  int[] roleIds)
         {
             var result = await _userRoleService.AddRoleToUserAsync(userId, roleIds.ToList());
 
@@ -88,7 +88,7 @@ namespace LoginSampleAPI.Controllers
 
         [HttpPost("removerole")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
-        public async Task<IActionResult> RemoveRole([FromForm] int userId, [FromForm] int[] roleIds)
+        public async Task<IActionResult> RemoveRole(int userId, int[] roleIds)
         {
             var result = await _userRoleService.RemoveRoleFromUserAsync(userId, roleIds.ToList());
 

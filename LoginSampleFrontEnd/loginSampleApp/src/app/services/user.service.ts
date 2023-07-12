@@ -51,11 +51,6 @@ export class UserService {
     return this.httpClient.post<SingleResponseModel<UserModel>>(newPath,formData);
   }
 
-
-  logout(){
-    this.cookieService.delete('token');
-  }
-
   private addRolesIntoForm(userIds:number[]): FormData{
     let formData = new FormData();
     for (let index = 0; index < userIds.length; index++) {

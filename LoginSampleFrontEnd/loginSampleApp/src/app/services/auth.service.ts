@@ -6,13 +6,15 @@ import { RegisterModel } from '../models/registerModel';
 import { HttpClient, HttpStatusCode } from '@angular/common/http'
 import { CookieService } from 'ngx-cookie-service';
 import { SingleResponseModel } from '../models/singleResponseModel';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 })
 export class AuthService {
 
-  constructor(private httpClient:HttpClient, private cookieService: CookieService) { }
+  constructor(private httpClient:HttpClient, private cookieService: CookieService,
+    private jwtHelper:JwtHelperService) { }
 
   apiUrl = 'https://localhost:7142/auth/';
 
@@ -54,9 +56,20 @@ export class AuthService {
       });        
     }
 
-    deleteTokenIfExpired(){
-      
+    logout(){
+      this.cookieService.delete('token');
     }
 
+    // deleteTokenIfExpired(){
+      
+    // }
+
+    getUserRoles():string[]{
+      const token = this.cookieService.get('token');
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      const roles = decodedToken['role'];
+
+       return roles;
+    }
 
 }
