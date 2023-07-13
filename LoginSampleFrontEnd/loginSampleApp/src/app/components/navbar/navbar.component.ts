@@ -8,14 +8,18 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./navbar.component.css']
 })
   export class NavbarComponent implements OnInit{
-    isLogged: boolean = false;
+    isLogged: boolean = true;
 
     constructor(private authService:AuthService, private router:Router) {}
     
+    isAdmin: boolean = false;
+
     async ngOnInit(): Promise<void> {
       this.authService.isAuthenticated().then((res) => {
         this.isLogged = res;   
     })
+    
+    this.authService.getUserRoles().includes("Admin") ? this.isAdmin = true : this.isAdmin = false;
   }
 
   logout(){    

@@ -4,22 +4,22 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="title">Rol Ekle</h5>
+                <h5 class="title">Kategori Ekle</h5>
             </div>
             <div class="card-body">
-                <form [formGroup]="roleAddForm">
+                <form [formGroup]="categoryAddForm">
                     <div class="mb-3">
-                        <label for="name" style="margin-bottom: 10px;">Rol Adı</label>
+                        <label for="name" style="margin-bottom: 10px;">Kategori Adı</label>
                         <div class="form-group">
                             <input type="text" id="name" formControlName="name" class="form-control"
-                                placeholder="Rol Adı" />
+                                placeholder="Kategori Adı" />
                         </div>
                     </div>
                 </form>
             </div>
             <div class="cart-footer">
                 <button class="btn btn-fill btn-primary position-absolute end-0"
-                    (click)="createRole()">Ekle</button>
+                    (click)="createCategory()">Ekle</button>
             </div>
         </div>
     </div>
@@ -27,12 +27,12 @@
 
 <div class="container" style="margin-top: 80px;">
     <ul>
-        <li *ngFor="let role of roles" class="list-group-item w-50" style="padding-top: 10px;">
+        <li *ngFor="let category of categories" class="list-group-item w-50" style="padding-top: 10px;">
             <div class="row">
-                <h3 class="col-8 border border-dark" style="height: 45px">{{role.name}} </h3>
+                <h3 class="col-8 border border-dark" style="height: 45px">{{category.name}} </h3>
 
-                <button class="col-4" (click)="deleteRole(role.id)" style="max-width: 200px; height: 45px;">
-                    <img src="https://img.icons8.com/plasticine/30/000000/filled-trash.png" /> Rolü Sil
+                <button class="col-4" (click)="deleteCategory(category.id)" style="max-width: 200px; height: 45px;">
+                    <img src="https://img.icons8.com/plasticine/30/000000/filled-trash.png" /> Karegoriyi Sil
                 </button>
             </div>
         </li>

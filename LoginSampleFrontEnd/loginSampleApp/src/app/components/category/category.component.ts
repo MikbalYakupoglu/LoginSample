@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoryModel } from 'src/app/models/categoryModel';
 import { CategoryService } from 'src/app/services/category.service';
 
@@ -11,7 +12,7 @@ export class CategoryComponent implements OnInit {
   categories:CategoryModel[];
   isCompleted:boolean;
 
-  constructor(private categoryService:CategoryService) { }
+  constructor(private categoryService:CategoryService, private router:Router) { }
 
   ngOnInit(): void {
     this.isCompleted = false;
@@ -25,4 +26,15 @@ export class CategoryComponent implements OnInit {
     })
   }
 
+  routeTo(routerLink: string) {
+    if (routerLink != null) {
+      this.router.navigate([routerLink]);
+      }
+    }
+
+
+
+
+
+    
 }

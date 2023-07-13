@@ -42,17 +42,22 @@ export class AuthService {
 
   isAuthenticated(): Promise<boolean>{
       return new Promise<boolean>((resolve, reject) => {
-        this.validateToken().subscribe((res) => {
-          if(res.status === HttpStatusCode.Ok){           
-            resolve(true);
-          }
-          else{
+        if(this.isCookieHasToken()){
+          this.validateToken().subscribe((res) => {
+            if(res.status === HttpStatusCode.Ok){           
+              resolve(true);
+            }
+            else{
+              resolve(false);
+            }
+          },
+          (errorRes) => {
             resolve(false);
-          }
-        },
-        (errorRes) => {
+          })
+        }
+        else{
           resolve(false);
-        })
+        }
       });        
     }
 
@@ -65,11 +70,18 @@ export class AuthService {
     // }
 
     getUserRoles():string[]{
-      const token = this.cookieService.get('token');
-      const decodedToken = this.jwtHelper.decodeToken(token);
-      const roles = decodedToken['role'];
+      if(this.isCookieHasToken()){
+        const token = this.cookieService.get('token');
+        const decodedToken = this.jwtHelper.decodeToken(token);
+        const roles = decodedToken['role'];
+  
+         return roles;
+      }
+      return [];
+    }
 
-       return roles;
+    private isCookieHasToken(): boolean{
+      return this.cookieService.check('token');
     }
 
 }

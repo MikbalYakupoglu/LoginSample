@@ -1,0 +1,16 @@
+html,
+body{
+    height: 80vh;
+    display: flex;
+}
+
+a{
+    display: flex;
+    
+}
+
+img{    
+    max-width: 300px;
+    max-height: 100px;
+    margin-bottom: 50px;
+}

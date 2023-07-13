@@ -35,8 +35,8 @@ export class CategoryService {
     return this.httpClient.delete<ResponseModel>(newPath);
   }
 
-  updateCategory(categoryId:number, newCategory:CategoryModel) : Observable<ResponseModel>{
-    let newPath = this.apiUrl + 'update?CategoryId=' + categoryId;
-    return this.httpClient.patch<ResponseModel>(newPath, newCategory);
-  }
+  // updateCategory(categoryId:number, newCategory:CategoryModel) : Observable<ResponseModel>{
+  //   let newPath = this.apiUrl + 'update?CategoryId=' + categoryId;
+  //   return this.httpClient.patch<ResponseModel>(newPath, newCategory);
+  // }
 }

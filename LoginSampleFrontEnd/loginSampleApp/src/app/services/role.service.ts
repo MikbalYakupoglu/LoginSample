@@ -25,10 +25,10 @@ export class RoleService {
     return this.httpClient.post<ResponseModel>(newPath,roleId);
   }
 
-  updateRoles(roleId:number, newRoles:RoleModel) : Observable<ResponseModel>{
-    let newPath = this.apiUrl + 'update?roleId=' + roleId;
-    return this.httpClient.patch<ResponseModel>(newPath, newRoles);
-  }
+  // updateRoles(roleId:number, newRoles:RoleModel) : Observable<ResponseModel>{
+  //   let newPath = this.apiUrl + 'update?roleId=' + roleId;
+  //   return this.httpClient.patch<ResponseModel>(newPath, newRoles);
+  // }
 
   deleteRoles(roleId:number) : Observable<ResponseModel>{
     let newPath = this.apiUrl + 'delete?roleId=' + roleId;

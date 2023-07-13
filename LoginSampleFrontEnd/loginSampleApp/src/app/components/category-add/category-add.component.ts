@@ -1,40 +1,40 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { RoleModel } from 'src/app/models/roleModel';
-import { RoleService } from 'src/app/services/role.service';
+import { CategoryModel } from 'src/app/models/categoryModel';
+import { CategoryService } from 'src/app/services/category.service';
 
 @Component({
-  selector: 'app-role',
-  templateUrl: './role.component.html',
-  styleUrls: ['./role.component.css']
+  selector: 'app-category-add',
+  templateUrl: './category-add.component.html',
+  styleUrls: ['./category-add.component.css']
 })
-export class RoleComponent {
-  
-  roleAddForm:FormGroup;
-  roles:RoleModel[];
-  constructor(private formBuilder:FormBuilder, private roleService:RoleService) { }
+export class CategoryAddComponent {
+
+  categoryAddForm:FormGroup;
+  categories:CategoryModel[];
+  constructor(private formBuilder:FormBuilder, private categoryService:CategoryService) { }
 
   ngOnInit(): void {
-    this.createRoleAddForm();
-    this.getRoles();
+    this.createCategoryAddForm();
+    this.getCategories();
   }
 
-  createRoleAddForm(){
-    this.roleAddForm = this.formBuilder.group({
+  createCategoryAddForm(){
+    this.categoryAddForm = this.formBuilder.group({
       name:["",Validators.required]
     });
   }
 
-  getRoles(){
-    this.roleService.getAllRoles().subscribe(response=>{
-      this.roles = response.data;
+  getCategories(){
+    this.categoryService.getAllCategories().subscribe(response=>{
+      this.categories = response.data;
     });
   }
 
-  createRole(){
-    if (this.roleAddForm.valid) {
-      let roleModel = Object.assign({},this.roleAddForm.value);
-      this.roleService.createRoles(roleModel).subscribe(response=>{
+  createCategory(){
+    if (this.categoryAddForm.valid) {
+      let categoryModel = Object.assign({},this.categoryAddForm.value);
+      this.categoryService.createCategory(categoryModel).subscribe(response=>{
           alert(response.message)
           setTimeout(() => {
             window.location.reload();        
@@ -62,8 +62,8 @@ export class RoleComponent {
     }
   }
 
-  deleteRole(colorId:number){
-    this.roleService.deleteRoles(colorId).subscribe((response)=>{
+  deleteCategory(colorId:number){
+    this.categoryService.deleteCategory(colorId).subscribe((response)=>{
       alert(response.message);
       setTimeout(() => {
         window.location.reload();        
@@ -79,4 +79,5 @@ export class RoleComponent {
     });
 
   }
+
 }

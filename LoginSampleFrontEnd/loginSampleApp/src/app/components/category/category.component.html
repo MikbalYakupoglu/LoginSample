@@ -1,7 +1,13 @@
 <app-navbar></app-navbar>
-<div *ngIf="isCompleted">
-    <div *ngFor= "let category of categories">
-        <p>{{category.name}}</p>
-    </div>
-    
+
+<div class="container" style="margin-top: 40px;">
+    <h2 *ngFor="let category of categories" style="margin-top: 20px;">
+        <a routerLink="../article" [queryParams]="{category : category.name}" >{{category.name}}</a>
+    </h2>
+    <!-- <select #colorList class="form-select" aria-label="Color Name"
+     (change)="routeTo('cars/color/' + colorList.value)">
+      <option value="" selected disabled hidden>Renk seçiniz</option>
+      <option *ngFor="let color of colors" [value]="color.colorId">{{color.colorName}}</option>
+    </select>
+    <label for="colorList">Filtrelenecek Renk</label> -->
 </div>

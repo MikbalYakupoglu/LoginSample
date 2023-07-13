@@ -18,6 +18,8 @@ import { UserManagementComponent } from './components/user-management/user-manag
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthService } from './services/auth.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { CategoryAddComponent } from './components/category-add/category-add.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
 // const authService = inject(AuthService);
 
@@ -33,6 +35,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     RoleComponent,
     UserManagementComponent,
     NavbarComponent,
+    CategoryAddComponent,
+    AdminPanelComponent,
   ],
   imports: [
     BrowserModule,
