@@ -4,6 +4,8 @@ using Entity.DTOs;
 using Core.Entity.Temp;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Business.Concrete;
+using Entity.Concrete;
 
 namespace LoginSampleAPI.Controllers
 {
@@ -12,10 +14,12 @@ namespace LoginSampleAPI.Controllers
     public class ArticlesController : ControllerBase
     {
         private readonly IArticleService _articleService;
+        private readonly IArticleCategoryService _articleCategoryService;
 
-        public ArticlesController(IArticleService articleService)
+        public ArticlesController(IArticleService articleService, IArticleCategoryService articleCategoryService)
         {
             _articleService = articleService;
+            _articleCategoryService = articleCategoryService;
         }
 
         [HttpPost("create")]
@@ -79,5 +83,28 @@ namespace LoginSampleAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPost("addcategory")]
+        [Authorize(Roles = AuthorizationRoles.Admin)]
+        public async Task<IActionResult> AddCategory(int articleId, int[] categoryIds)
+        {
+            var result = await _articleCategoryService.AddCategoryToArticleAsync(articleId, categoryIds.ToList());
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
+        [HttpPost("removecategory")]
+        [Authorize(Roles = AuthorizationRoles.Admin)]
+        public async Task<IActionResult> RemoveCategory(int articleId, int[] categoryIds)
+        {
+            var result = await _articleCategoryService.RemoveCategoryFromArticleAsync(articleId, categoryIds.ToList());
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
     }
 }

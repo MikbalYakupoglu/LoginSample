@@ -22,6 +22,6 @@ namespace Entity.Concrete
         [ForeignKey(nameof(User))] public int? DeletedBy { get; set; }
 
         public User? Creator { get; set; }
-        List<Category> Categories { get; set; }
+        public List<ArticleCategory> ArticleCategories { get; set; }
     }
 }

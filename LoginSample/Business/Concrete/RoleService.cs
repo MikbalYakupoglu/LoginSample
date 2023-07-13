@@ -11,10 +11,13 @@ namespace Business.Concrete;
 public class RoleService : IRoleService
 {
     private readonly IRoleDal _roleDal;
+    private readonly IUserRoleDal _userRoleDal;
 
-    public RoleService(IRoleDal roleDal)
+
+    public RoleService(IRoleDal roleDal, IUserRoleDal userRoleDal)
     {
         _roleDal = roleDal;
+        _userRoleDal = userRoleDal;
     }
 
     public async Task<IResult> CreateAsync(Role role)
@@ -34,7 +37,8 @@ public class RoleService : IRoleService
     public async Task<IResult> DeleteAsync(int roleId)
     {
         var result = BusinessRules.Run(
-            await CheckIfRoleExistInDbForModifyAsync(roleId)
+            await CheckIfRoleExistInDbForModifyAsync(roleId),
+            await CheckIfRoleNotUsedByUser(roleId)
         );
 
         if (!result.Success)
@@ -101,6 +105,15 @@ public class RoleService : IRoleService
     {
         if (string.IsNullOrWhiteSpace(roleName))
             return new ErrorResult(Messages.RoleNameCannotBeNull);
+
+        return new SuccessResult();
+    }
+
+    private async Task<IResult> CheckIfRoleNotUsedByUser(int roleId)
+    {
+        var userRoles = await _userRoleDal.GetAllAsync(ur=> ur.RoleId == roleId);
+        if (userRoles.Any())
+            return new ErrorResult(Messages.RoleCannotBeDeleteWhileUsing);
 
         return new SuccessResult();
     }

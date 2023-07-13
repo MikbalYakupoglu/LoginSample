@@ -41,18 +41,19 @@ namespace LoginSampleAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPatch("update")]
-        public async Task<IActionResult> Update(int categoryId, Category newCategory)
-        {
-            var result = await _categoryService.UpdateAsync(categoryId, newCategory);
+        //[HttpPatch("update")]
+        //public async Task<IActionResult> Update(int categoryId, Category newCategory)
+        //{
+        //    var result = await _categoryService.UpdateAsync(categoryId, newCategory);
 
-            if (!result.Success)
-                return BadRequest(result);
+        //    if (!result.Success)
+        //        return BadRequest(result);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
 
         [HttpGet("getall")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll()
         {
             var result = await _categoryService.GetAllAsync();

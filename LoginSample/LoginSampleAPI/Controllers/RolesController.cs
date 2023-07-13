@@ -40,16 +40,16 @@ namespace LoginSampleAPI.Controllers
             return Ok(result);
         }
 
-        [HttpPatch("update")]
-        public async Task<IActionResult> Update(int roleId, Role newRole)
-        {
-            var result = await _roleService.UpdateAsync(roleId, newRole);
+        //[HttpPatch("update")]
+        //public async Task<IActionResult> Update(int roleId, Role newRole)
+        //{
+        //    var result = await _roleService.UpdateAsync(roleId, newRole);
 
-            if (!result.Success)
-                return BadRequest(result);
+        //    if (!result.Success)
+        //        return BadRequest(result);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
 
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll()

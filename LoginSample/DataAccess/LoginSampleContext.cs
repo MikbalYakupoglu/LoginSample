@@ -14,17 +14,9 @@ namespace DataAccess
             modelBuilder.Entity<Article>().HasQueryFilter(a => a.Creator.IsActive);
 
             modelBuilder.Entity<Article>().HasQueryFilter(a => !a.IsDeleted);
+            modelBuilder.Entity<ArticleCategory>().HasQueryFilter(ac => !ac.Article.IsDeleted);
 
 
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany()
-                .HasForeignKey(ur => ur.RoleId);
 
 
             modelBuilder.Entity<Article>().HasIndex(a => a.CreatedAt);
@@ -52,5 +44,7 @@ namespace DataAccess
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Article?> Articles { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<ArticleCategory> ArticleCategories { get; set; }
+
     }
 }

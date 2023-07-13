@@ -33,6 +33,7 @@ namespace Business.Utils
         public const string RoleCreateSuccess = "Rol Başarıyla Oluşturuldu.";
         public const string RoleUpdateSuccess = "Rol Başarıyla Güncellendi.";
         public const string RoleDeleteSuccess = "Rol Başarıyla Silindi.";
+        public const string RoleCannotBeDeleteWhileUsing = "Rol Kullanıcı Tarafından Kullanılırken Silinemez.";
 
         // Category
         public const string CategoryCreateSuccess = "Kategori Başarıyla Oluşturuldu.";
@@ -41,6 +42,7 @@ namespace Business.Utils
         public const string CategoryAlreadyExist = "Rol Bulunamadı.";
         public const string CategoryNotFound = "Kategori Bulunamadı.";
         public const string CategoryNameCannotBeNull = "Kategori Adı Boş Olamaz.";
+        public const string CategoryCannotBeDeleteWhileUsing = "Kategori Haber Tarafından Kullanılırken Silinemez.";
 
         // Article
         public const string ArticleCreateSuccess = "Haber Başarıyla Oluşturuldu.";
@@ -50,5 +52,9 @@ namespace Business.Utils
         public const string AnArticleAbleToModifyByOwner = "Haberi Sadece Oluşturucusu Değiştirebilir.";
         public const string TitleCannotBeNull = "Başlık Boş Bırakılamaz.";
         public const string ContentCannotBeNull = "İçerik Boş Bırakılamaz.";
+
+        // Article Category
+        public const string ArticleCategoryNotModified = "Haberin Kategorisinde Değişiklik Bulunamadı.";
+        public const string ArticleCategoryUpdateSuccess = "Haberin Kategorisi Başarıyla Değiştirildi.";
     }
 }

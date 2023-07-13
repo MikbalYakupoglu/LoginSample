@@ -11,6 +11,5 @@ namespace Business.Abstract
     {
         Task<IResult> AddRoleToUserAsync(int userId, List<int> roleIds);
         Task<IResult> RemoveRoleFromUserAsync(int userId, List<int> roleIds);
-
     }
 }

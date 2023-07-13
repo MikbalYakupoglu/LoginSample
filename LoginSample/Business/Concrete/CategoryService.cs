@@ -10,10 +10,12 @@ namespace Business.Concrete
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryDal _categoryDal;
+        private readonly IArticleCategoryDal _articleCategoryDal;
 
-        public CategoryService(ICategoryDal categoryDal)
+        public CategoryService(ICategoryDal categoryDal, IArticleCategoryDal articleCategoryDal)
         {
             _categoryDal = categoryDal;
+            _articleCategoryDal = articleCategoryDal;
         }
 
         public async Task<IResult> CreateAsync(Category category)
@@ -34,7 +36,8 @@ namespace Business.Concrete
         public async Task<IResult> DeleteAsync(int categoryId)
         {
             var result = BusinessRules.Run(
-                 await CheckIfCategoryExistInDb(categoryId)
+                 await CheckIfCategoryExistInDb(categoryId),
+                 await CheckIfCategoryNotUsedByArticle(categoryId)
                 );
 
             if(!result.Success)
@@ -111,5 +114,13 @@ namespace Business.Concrete
             return new SuccessResult();
         }
 
+        private async Task<IResult> CheckIfCategoryNotUsedByArticle(int categoryId)
+        {
+            var userRoles = await _articleCategoryDal.GetAllAsync(ac => ac.CategoryId == categoryId);
+            if (userRoles.Any())
+                return new ErrorResult(Messages.CategoryCannotBeDeleteWhileUsing);
+
+            return new SuccessResult();
+        }
     }
 }

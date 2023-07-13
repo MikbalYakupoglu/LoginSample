@@ -14,7 +14,7 @@ namespace DataAccess.Concrete
     {
         public async Task<List<string>> GetUserRolesAsync(int userId)
         {
-            using (var context = new LoginSampleContext())
+            await using (var context = new LoginSampleContext())
             {
                 var userWithRoles = await context.Users
                     .Include(u => u.UserRoles)

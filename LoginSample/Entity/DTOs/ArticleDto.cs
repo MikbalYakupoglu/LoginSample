@@ -1,4 +1,6 @@
-﻿namespace Entity.DTOs;
+﻿using Entity.Concrete;
+
+namespace Entity.DTOs;
 
 public class ArticleDto
 {
@@ -7,4 +9,5 @@ public class ArticleDto
     public string Content { get; set; }
     public DateTime CreatedAt { get; set; }
     public string? CreatorName { get; set; }
+    public List<string> Categories { get; set; }
 }

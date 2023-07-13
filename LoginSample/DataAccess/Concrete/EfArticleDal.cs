@@ -33,6 +33,7 @@ namespace DataAccess.Concrete
             {
                 return await context.Articles
                     .Include(a => a.Creator)
+                    //.Include(a => a.Categories)
                     .SingleOrDefaultAsync(filter);
             }
         }
@@ -43,6 +44,7 @@ namespace DataAccess.Concrete
             {
                 var articles = context.Articles
                     .Include(a => a.Creator)
+                    //.Include(a=> a.Categories)
                     .OrderByDescending(filter => filter.CreatedAt);
 
                 if (!articles.Any())
