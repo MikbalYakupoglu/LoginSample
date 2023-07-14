@@ -10,6 +10,6 @@ namespace DataAccess.Abstract
 {
     public interface ICategoryDal : IEntityRepositoryBase<Category>
     {
-
+        Task<List<int>> ConvertCategoryNamesToCategoryIdsAsync(IEnumerable<string> categoryNames);
     }
 }

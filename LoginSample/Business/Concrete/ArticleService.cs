@@ -17,16 +17,20 @@ namespace Business.Concrete;
 public class ArticleService : IArticleService
 {
     private readonly IArticleDal _articleDal;
+    private readonly IArticleCategoryService _articleCategoryService;
     private readonly ArticleForCreateValidator _validator;
     private readonly IUserRoleDal _userRoleDal;
     private readonly IMapper _mapper;
+    private readonly ICategoryDal _categoryDal;
 
-    public ArticleService(IArticleDal articleDal, ArticleForCreateValidator validator, IUserRoleDal userRoleDal, IMapper mapper)
+    public ArticleService(IArticleDal articleDal, ArticleForCreateValidator validator, IUserRoleDal userRoleDal, IMapper mapper, IArticleCategoryService articleCategoryService, ICategoryDal categoryDal)
     {
         _articleDal = articleDal;
         _validator = validator;
         _userRoleDal = userRoleDal;
         _mapper = mapper;
+        _articleCategoryService = articleCategoryService;
+        _categoryDal = categoryDal;
     }
 
     public async Task<IResult> CreateAsync(ArticleDto articleDto)
@@ -47,9 +51,10 @@ public class ArticleService : IArticleService
         {
             CreatorId = GetLoginedUserId(),
             Title = articleDto.Title,
-            Content = articleDto.Content,
+            Content = articleDto.Content
         };
         await _articleDal.CreateAsync(articleToAdd);
+        await AddCategoriesIntoArticle(articleToAdd.Id, articleDto);
         return new SuccessResult(Messages.ArticleCreateSuccess);
     }
 
@@ -103,6 +108,8 @@ public class ArticleService : IArticleService
     {
         var articles = await _articleDal.GetAllAsync(null, page, size);
 
+        if (!articles.Any())
+            return new ErrorDataResult<IEnumerable<ArticleDto>>("Kullanıcıya Ait Haber Bulunamadı.");
 
         return new SuccessDataResult<IEnumerable<ArticleDto>>(_mapper.Map<IEnumerable<Article>, IEnumerable<ArticleDto>>(articles));
     }
@@ -179,4 +186,11 @@ public class ArticleService : IArticleService
         var loginedUserId = GetLoginedUserId();
         return article.CreatorId == loginedUserId;
     }
+
+    private async Task AddCategoriesIntoArticle(int newArticleId,ArticleDto articleDto)
+    {
+        var categoryIds = await _categoryDal.ConvertCategoryNamesToCategoryIdsAsync(articleDto.Categories);
+        await _articleCategoryService.AddCategoryToArticleAsync(newArticleId, categoryIds);
+    }
+
 }

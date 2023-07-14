@@ -18,7 +18,8 @@ public class ArticleProfile : Profile
 
         CreateMap<ArticleDto, Article>()
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
-            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content));
+            .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
+            .ForMember(dest => dest.ArticleCategories, opt => opt.MapFrom(src => src.Categories.Select(categoryName => new ArticleCategory { Category = new Category { Name = categoryName } }).ToList()));
 
     }
 }

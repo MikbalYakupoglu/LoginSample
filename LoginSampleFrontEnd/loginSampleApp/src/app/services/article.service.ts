@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { ListResponseModel } from '../models/listResponseModel';
 import { ResponseModel } from '../models/responseModel';
+import { ArticleCreateModel } from '../models/articleCreateModel';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,8 @@ export class ArticleService {
 
   createArticle(article:ArticleModel) : Observable<ResponseModel>{
     let newPath = this.apiUrl + 'create';
+    console.log("article : " + article);
+    
     return this.httpClient.post<ResponseModel>(newPath,article);
   }
 

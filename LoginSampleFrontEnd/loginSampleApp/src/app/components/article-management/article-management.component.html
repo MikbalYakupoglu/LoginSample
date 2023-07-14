@@ -1,1 +1,65 @@
-<p>article-management works!</p>
+<app-navbar></app-navbar>
+
+<html>
+
+<body>
+    <div *ngIf="!isCreateActive && !isUpdateActive" class="container">
+        <div class="position-absolute top-20 end-0" style="margin-right: 40px;">
+            <button type="button" class="btn btn-success" (click)="routeCreate()">Yeni Makale Oluştur</button>
+        </div>
+        <!-- Hiç yazısı yoksa -->
+        <div *ngIf="!isWriterHasAnyArticle" id="withoutAnyArticle">
+            <h4>Henüz Hiç Makale Oluşturmamışsın.. :( <a (click)="routeCreate()"
+                    style="color: blue;text-decoration: underline; cursor: pointer;">Buraya</a> Tıklayarak Yeni Yazı
+                Oluşturabilirsin.</h4>
+        </div>
+
+        <!-- Yazdığı yazılar varsa -->
+        <div *ngIf="isWriterHasAnyArticle" >
+            <div *ngFor="let article of usersArticles" style="max-height: 300px; margin-bottom: 30px;">
+                <div class="row">
+                    <img class="col-3" id="articleImg"  src="../../../assets/profilephoto.jpg">
+                    <div class="col-4" id="textDiv">
+                        <h3 id="hForall">{{article.title}}</h3>
+                        <p id="pForAll">{{article.content}}</p>
+                    </div>
+                    <div class="col-4" id="modifyButtonsDiv">
+                        <button (click)="activeDeletePanel(article.id)" id="modifyButtons" class="btn btn-danger"><img src="https://img.icons8.com/ios/25/delete-trash.png"></button>
+                        <button (click)="routeUpdate(article)" id="modifyButtons" class="btn btn-info"><img src="https://img.icons8.com/pastel-glyph/25/loop.png"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Create New Article -->
+    <div *ngIf="isCreateActive" class="container position-relative">
+        <form class="form" [formGroup]="articleCreateForm">
+            <h1 class="h3 mb-3 fw-normal">Yeni Makale Oluştur</h1>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="floatingInput" 
+              formControlName="title">
+              <label for="floatingInput">Başlık</label>
+            </div>
+            <div class="form-floating"> 
+              <textarea type="text" placeholder="İçerik" id="floatingInput" 
+              formControlName="content" rows="15" cols="150"></textarea>
+            </div>
+            <h4>Kategorileri Seçiniz</h4>
+            <div *ngFor="let category of categories">
+                <input type="checkbox" name="{{category.name}}" value="{{category.name}}" id="{{category.name}}" class="m-2">
+                <label for="{{category.name}}">{{category.name}}</label><br>
+            </div>
+      
+            <button id="submitButton" class="btn btn-primary position-absolute bottom-0 end-0" type="submit" (click)="createArticle()">Oluştur</button>
+          </form>
+    </div>
+
+    <!-- Update Selected Article -->
+    <div *ngIf="isUpdateActive" class="container">
+
+    </div>
+</body>
+
+</html>

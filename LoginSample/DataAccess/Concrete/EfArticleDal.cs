@@ -64,7 +64,8 @@ namespace DataAccess.Concrete
                 var articles = context.Articles
                     .Include(a => a.ArticleCategories)
                     .ThenInclude(ac => ac.Category)
-                    .Where(a => a.ArticleCategories.Any(ac => ac.Category.Name == categoryName));
+                    .Where(a => a.ArticleCategories.Any(ac => ac.Category.Name == categoryName))
+                    .OrderByDescending(filter => filter.CreatedAt);
 
                 if (!articles.Any())
                     return Enumerable.Empty<Article>();
