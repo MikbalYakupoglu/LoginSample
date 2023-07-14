@@ -33,7 +33,8 @@ namespace DataAccess.Concrete
             {
                 return await context.Articles
                     .Include(a => a.Creator)
-                    //.Include(a => a.Categories)
+                    .Include(a => a.ArticleCategories)
+                    .ThenInclude(ac=> ac.Category)
                     .SingleOrDefaultAsync(filter);
             }
         }
@@ -53,6 +54,22 @@ namespace DataAccess.Concrete
                 return filter == null
                     ? await articles.ToPaginateAsync(page, size)
                     : await articles.Where(filter).ToPaginateAsync(page, size);
+            }
+        }
+
+        public async Task<IEnumerable<Article>> GetAllByCategory(string categoryName, int page, int size)
+        {
+            await using (LoginSampleContext context = new LoginSampleContext())
+            {
+                var articles = context.Articles
+                    .Include(a => a.ArticleCategories)
+                    .ThenInclude(ac => ac.Category)
+                    .Where(a => a.ArticleCategories.Any(ac => ac.Category.Name == categoryName));
+
+                if (!articles.Any())
+                    return Enumerable.Empty<Article>();
+
+                return await articles.ToPaginateAsync(page, size);
             }
         }
     }

@@ -13,7 +13,8 @@ public class ArticleProfile : Profile
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
             .ForMember(dest => dest.Content, opt => opt.MapFrom(src => src.Content))
             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => src.CreatedAt))
-            .ForMember(dest => dest.CreatorName, opt => opt.MapFrom(src => src.Creator.Email));
+            .ForMember(dest => dest.CreatorName, opt => opt.MapFrom(src => src.Creator.Email))
+            .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.ArticleCategories.Select(ac => ac.Category.Name)));
 
         CreateMap<ArticleDto, Article>()
             .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))

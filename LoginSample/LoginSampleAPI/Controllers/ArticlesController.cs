@@ -83,6 +83,18 @@ namespace LoginSampleAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getallbycategory")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllByCategory(string categoryName, int page = 0, int size = 10)
+        {
+            var result = await _articleService.GetAllByCategoryAsync(categoryName, page, size);
+
+            if (!result.Success)
+                return BadRequest(result);
+
+            return Ok(result);
+        }
+
         [HttpPost("addcategory")]
         [Authorize(Roles = AuthorizationRoles.Admin)]
         public async Task<IActionResult> AddCategory(int articleId, int[] categoryIds)

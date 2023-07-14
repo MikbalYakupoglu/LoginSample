@@ -1,2 +1,41 @@
 <app-navbar></app-navbar>
-<p>article works!</p>
+
+<html>
+<body>
+    <!-- 1 haber görünüm -->
+    <div class="container" *ngIf="isDetails">
+        <div style="max-height: 300px;">
+            <div class="row">
+                <img class="col-5" src="../../../assets/profilephoto.jpg">
+                <div class="col-7" id="textDiv" style="display: flex; justify-content: center; align-items: center;">
+                    <h3 id="hForOne">{{articleDetails.title}}</h3>                    
+                </div>
+                <div style="margin-top: 40px;">
+                    <p id="pForOne">{{articleDetails.content}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="position-absolute bottom-0 start-20" style="margin-bottom: 40px;">
+            <a *ngFor="let category of articleDetails.categories" class="border border-primary ms-2" routerLink="/articles/category/{{category}}">{{category}}</a>
+        </div>
+        <div class="position-absolute bottom-0 end-0" style="margin-bottom: 40px; margin-right: 40px;">
+            <a>Created At {{getCreateDate()}} by {{articleDetails.creatorName}}</a>
+        </div>
+    </div>
+
+    <!-- Bütün Haberlerin Listesi -->
+    <div class="container" *ngIf="!isDetails">
+        <div *ngFor="let article of articles" style="max-height: 300px; margin-bottom: 30px;">
+            <a (click)="routeToArticleDetails(article.id)">
+                <div class="row">
+                    <img class="col-5" src="../../../assets/profilephoto.jpg">
+                    <div class="col-7" id="textDiv">
+                        <h3 id="hForall">{{article.title}}</h3>
+                        <p id="pForAll">{{article.content}}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

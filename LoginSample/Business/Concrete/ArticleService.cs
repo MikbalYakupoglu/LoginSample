@@ -103,6 +103,16 @@ public class ArticleService : IArticleService
     {
         var articles = await _articleDal.GetAllAsync(null, page, size);
 
+
+        return new SuccessDataResult<IEnumerable<ArticleDto>>(_mapper.Map<IEnumerable<Article>, IEnumerable<ArticleDto>>(articles));
+    }
+
+    public async Task<IDataResult<IEnumerable<ArticleDto>>> GetAllByCategoryAsync(string categoryName, int page = 0, int size = 10)
+    {
+        var articles = await _articleDal.GetAllByCategory(categoryName, page,size);
+        if (!articles.Any())
+            return new ErrorDataResult<IEnumerable<ArticleDto>>("İstenen Kategoride Haber Bulunamadı.");
+
         return new SuccessDataResult<IEnumerable<ArticleDto>>(_mapper.Map<IEnumerable<Article>, IEnumerable<ArticleDto>>(articles));
     }
 

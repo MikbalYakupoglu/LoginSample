@@ -13,13 +13,14 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HomeComponent } from './components/home/home.component';
 import { ArticleComponent } from './components/article/article.component';
 import { CategoryComponent } from './components/category/category.component';
-import { RoleComponent } from './components/role/role.component';
+import { RoleComponent } from './components/role-manage/role.component';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthService } from './services/auth.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { CategoryAddComponent } from './components/category-add/category-add.component';
+import { CategoryAddComponent } from './components/category-management/category-add.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { ArticleManagementComponent } from './components/article-management/article-management.component';
 
 // const authService = inject(AuthService);
 
@@ -37,6 +38,7 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
     NavbarComponent,
     CategoryAddComponent,
     AdminPanelComponent,
+    ArticleManagementComponent,
   ],
   imports: [
     BrowserModule,

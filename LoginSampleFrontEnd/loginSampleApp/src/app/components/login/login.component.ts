@@ -45,7 +45,7 @@ export class LoginComponent implements OnInit {
         else{
           alert(errorRes.error)
         }
-        
+        window.location.reload();
       });
     }
     else{

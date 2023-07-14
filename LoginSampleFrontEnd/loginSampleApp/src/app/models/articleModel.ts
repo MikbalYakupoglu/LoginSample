@@ -4,4 +4,5 @@ export interface ArticleModel{
     content:string,
     createdAt:Date,
     creatorName:string;
+    categories:string[];
 }

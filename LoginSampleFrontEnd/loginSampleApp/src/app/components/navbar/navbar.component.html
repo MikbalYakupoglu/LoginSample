@@ -6,9 +6,8 @@
         </a> -->
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a class="nav-link px-2 text-secondary" routerLink="/home">Home</a></li>
-          <li><a class="nav-link px-2 text-white">Features</a></li>
-          <li><a class="nav-link px-2 text-white">Pricing</a></li>
+          <li><a class="nav-link px-2 text-secondary" routerLink="/home">Ana Sayfa</a></li>
+          <li><a class="nav-link px-2 text-white" routerLink="/categories">Kategoriler</a></li>
         </ul>
 
         <!-- Search -->
@@ -17,8 +16,8 @@
         </form> -->
 
         <div class="text-end" *ngIf="!isLogged">
-          <button type="button" class="btn btn-outline-light me-2" routerLink="/login">Login</button>
-          <button type="button" class="btn btn-warning" routerLink="/register">Sign-up</button>
+          <button type="button" class="btn btn-outline-light me-2" routerLink="/login">Giriş Yap</button>
+          <button type="button" class="btn btn-warning" routerLink="/register">Kayıt Ol</button>
         </div>
         
         <div class="dropdown text-end" *ngIf="isLogged">
@@ -26,10 +25,10 @@
               <img src="../../../assets/profilephoto.jpg" width="32" height="32" class="rounded-circle">
             </a>
             <ul class="dropdown-menu text-small">
-              <li><a class="dropdown-item" routerLink="/user">Profile</a></li>
-              <li *ngIf="isAdmin"><a class="dropdown-item text-danger" routerLink="../admin/manage">Admin Panel</a></li>
+              <li><a class="dropdown-item" routerLink="/user">Profilim</a></li>
+              <li *ngIf="isAdmin"><a class="dropdown-item text-danger" routerLink="../admin/manage">Admin Paneli</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" (click)="logout()">Sign out</a></li>
+              <li><a class="dropdown-item" (click)="logout()">Çıkış Yap</a></li>
             </ul>
           </div>
       </div>

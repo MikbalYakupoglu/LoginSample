@@ -15,13 +15,18 @@ export class ArticleService {
 
   apiUrl = 'https://localhost:7142/articles/';
 
-  getArticle() : Observable<SingleResponseModel<ArticleModel>>{
-    let newPath = this.apiUrl + 'get';
+  getArticle(articleId:number) : Observable<SingleResponseModel<ArticleModel>>{
+    let newPath = this.apiUrl + 'get?articleId='+articleId;
     return this.httpClient.get<SingleResponseModel<ArticleModel>>(newPath);
   }
 
   getAllArticles() : Observable<ListResponseModel<ArticleModel>>{
     let newPath = this.apiUrl + 'getall';
+    return this.httpClient.get<ListResponseModel<ArticleModel>>(newPath);
+  }
+
+  getAllArticlesByCategory(categoryName:string) : Observable<ListResponseModel<ArticleModel>>{
+    let newPath = this.apiUrl + 'getallbycategory?categoryName='+ categoryName;
     return this.httpClient.get<ListResponseModel<ArticleModel>>(newPath);
   }
 
@@ -39,4 +44,5 @@ export class ArticleService {
     let newPath = this.apiUrl + 'update?articleId=' + articleId;
     return this.httpClient.patch<ResponseModel>(newPath, newArticle);
   }
+
 }

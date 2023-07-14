@@ -11,5 +11,6 @@ public interface IArticleService
     Task<IResult> UpdateAsync(int articleId, ArticleDto updatedArticle);
     Task<IDataResult<ArticleDto>> GetAsync(int articleId);
     Task<IDataResult<IEnumerable<ArticleDto>>> GetAllAsync(int page, int size);
+    Task<IDataResult<IEnumerable<ArticleDto>>> GetAllByCategoryAsync(string categoryName, int page, int size);
 
 }

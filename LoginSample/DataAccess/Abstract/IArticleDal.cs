@@ -10,6 +10,6 @@ namespace DataAccess.Abstract
 {
     public interface IArticleDal : IEntityRepositoryBase<Article>
     {
-
+        Task<IEnumerable<Article>> GetAllByCategory(string categoryName, int page, int size);
     }
 }

@@ -26,10 +26,9 @@ export class CategoryComponent implements OnInit {
     })
   }
 
-  routeTo(routerLink: string) {
-    if (routerLink != null) {
-      this.router.navigate([routerLink]);
-      }
+  routeToCategorizedArticles(categoryName:string) {
+      const url = '/articles/category'
+      this.router.navigate([url, categoryName]);
     }
 
 
