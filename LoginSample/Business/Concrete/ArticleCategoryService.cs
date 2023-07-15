@@ -46,6 +46,33 @@ public class ArticleCategoryService : IArticleCategoryService
         return new SuccessResult(Messages.ArticleCategoryUpdateSuccess);
     }
 
+    public async Task ModifyArticlesCategories(int articleId, List<string> categoryNames)
+    {
+        var userCategories = await _articleCategoryDal.GetArticleCategoriesAsync(articleId);
+        var categoryNamesToRemove = userCategories.Except(categoryNames, StringComparer.Ordinal).ToList();
+        var categoryIdsToRemove = await _categoryDal.ConvertCategoryNamesToCategoryIdsAsync(categoryNamesToRemove);
+        ;
+        foreach (var categoryIdToRemove in categoryIdsToRemove)
+        {
+            await _articleCategoryDal.DeleteAsync(new ArticleCategory()
+            {
+                ArticleId = articleId,
+                CategoryId = categoryIdToRemove
+            });
+        }
+
+        var categoryNamesToAdd = categoryNames.Except(userCategories, StringComparer.Ordinal).ToList();
+        var categoryIdsToAdd = await _categoryDal.ConvertCategoryNamesToCategoryIdsAsync(categoryNamesToAdd);
+
+        foreach (var categoryIdToAdd in categoryIdsToAdd)
+        {
+            await _articleCategoryDal.CreateAsync(new ArticleCategory()
+            {
+                ArticleId = articleId,
+                CategoryId = categoryIdToAdd
+            });
+        }
+    }
 
 
     private async Task<int> AddArticleCategoryAsync(int articleId, List<int> categoryIdsToAdd)

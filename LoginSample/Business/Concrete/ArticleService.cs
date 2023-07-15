@@ -89,6 +89,7 @@ public class ArticleService : IArticleService
         articleToUpdate.Title = updatedArticle.Title;
         articleToUpdate.Content = updatedArticle.Content;
         articleToUpdate.UpdatedAt = DateTime.Now;
+        await _articleCategoryService.ModifyArticlesCategories(articleId, updatedArticle.Categories);
 
         await _articleDal.UpdateAsync(articleToUpdate);
         return new SuccessResult(Messages.ArticleUpdateSuccess);

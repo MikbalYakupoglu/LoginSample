@@ -1,0 +1,33 @@
+#withoutAnyArticle{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#articleImg{
+    height: 300px;
+    width: 400px;
+}
+
+p,h3{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#modifyButtonsDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#modifyButtons{
+    height: 50px; 
+    width: 50px;
+    margin-right: 20px;
+}
+
+.form{
+    max-width: 500px;
+  }
+  

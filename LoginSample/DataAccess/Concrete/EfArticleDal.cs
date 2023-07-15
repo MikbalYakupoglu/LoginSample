@@ -45,7 +45,8 @@ namespace DataAccess.Concrete
             {
                 var articles = context.Articles
                     .Include(a => a.Creator)
-                    //.Include(a=> a.Categories)
+                    .Include(a=> a.ArticleCategories)
+                    .ThenInclude(ac => ac.Category)
                     .OrderByDescending(filter => filter.CreatedAt);
 
                 if (!articles.Any())

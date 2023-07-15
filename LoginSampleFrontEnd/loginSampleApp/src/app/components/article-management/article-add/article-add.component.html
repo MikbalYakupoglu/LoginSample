@@ -1,0 +1,25 @@
+<app-navbar></app-navbar>
+
+<body>
+    <div class="container position-relative">
+        <form class="form" [formGroup]="articleCreateForm">
+            <h1 class="h3 mb-3 fw-normal">Yeni Makale Oluştur</h1>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="floatingInput" 
+              formControlName="title">
+              <label for="floatingInput">Başlık</label>
+            </div>
+            <div class="form-floating"> 
+              <textarea type="text" placeholder="İçerik" id="floatingInput" 
+              formControlName="content" rows="15" cols="150"></textarea>
+            </div>
+            <h4>Kategorileri Seçiniz</h4>
+            <div *ngFor="let category of categories">
+                <input type="checkbox" name="{{category.name}}" value="{{category.name}}" id="{{category.name}}" class="m-2">
+                <label for="{{category.name}}">{{category.name}}</label><br>
+            </div>
+      
+            <button id="submitButton" class="btn btn-primary position-absolute bottom-0 end-0" type="submit" (click)="createArticle()">Oluştur</button>
+          </form>
+    </div>
+</body>

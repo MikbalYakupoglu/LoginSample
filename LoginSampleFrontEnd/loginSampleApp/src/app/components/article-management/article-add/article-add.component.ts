@@ -1,52 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ArticleModel } from 'src/app/models/articleModel';
 import { CategoryModel } from 'src/app/models/categoryModel';
 import { ArticleService } from 'src/app/services/article.service';
 import { CategoryService } from 'src/app/services/category.service';
 
 @Component({
-  selector: 'app-article-management',
-  templateUrl: './article-management.component.html',
-  styleUrls: ['./article-management.component.css']
+  selector: 'app-article-add',
+  templateUrl: './article-add.component.html',
+  styleUrls: ['./article-add.component.css']
 })
-export class ArticleManagementComponent implements OnInit{
-
-  isWriterHasAnyArticle:boolean = true;
-  usersArticles:ArticleModel[];
-  articleToUpdate: ArticleModel;
+export class ArticleAddComponent implements OnInit{
 
   categories:CategoryModel[];
-
-  isCreateActive: boolean = false;
-  isUpdateActive: boolean = false;
-
-
   articleCreateForm:FormGroup;
   selectedCategories:string[];
 
   constructor(private articleService:ArticleService, private categoryService:CategoryService,
-    private formBuilder:FormBuilder, private router:Router){
-    this.isCreateActive = false;
-    this.isUpdateActive = false;
-  }
+    private formBuilder:FormBuilder, private router:Router) {}
+
 
   ngOnInit(): void {
-    this.getUsersArticles();
     this.createArticleCreateForm();
     this.getCategories();
   }
 
-  getUsersArticles(){
-    this.articleService.getAllArticles().subscribe((res) => {
-      this.usersArticles = res.data;
-    })
-  }
-
-  routeCreate(){
-    this.isCreateActive = true;;
-  }
 
   createArticle(){
     const selectedCategories = this.getSelectedCategories();
@@ -73,20 +51,6 @@ export class ArticleManagementComponent implements OnInit{
   }
 
 
-  routeUpdate(article:ArticleModel){
-    this.isUpdateActive = true;
-    this.articleToUpdate = article;
-  }
-
-  activeDeletePanel(articleId:number){
-    if(confirm('Makaleyi Silmek İstediğine Emin Misin ?')){
-      this.articleService.deleteArticle(articleId).subscribe(res => {
-        alert(res.message);
-        window.location.reload();
-      })
-    }
-  }
-
   getCategories(){
     this.categoryService.getAllCategories().subscribe(res => {
       this.categories = res.data;
@@ -99,5 +63,4 @@ export class ArticleManagementComponent implements OnInit{
     checkboxes.forEach(c => checkedCategories.push(c.id));
     return checkedCategories;
   }
-
 }

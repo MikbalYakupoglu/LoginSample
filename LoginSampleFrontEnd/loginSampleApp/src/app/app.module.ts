@@ -20,7 +20,9 @@ import { AuthService } from './services/auth.service';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { CategoryAddComponent } from './components/category-management/category-add.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
-import { ArticleManagementComponent } from './components/article-management/article-management.component';
+import { ArticleManagementComponent } from './components/article-management/article-manage/article-management.component';
+import { ArticleAddComponent } from './components/article-management/article-add/article-add.component';
+import { ArticleUpdateComponent } from './components/article-management/article-update/article-update.component';
 
 // const authService = inject(AuthService);
 
@@ -39,6 +41,8 @@ import { ArticleManagementComponent } from './components/article-management/arti
     CategoryAddComponent,
     AdminPanelComponent,
     ArticleManagementComponent,
+    ArticleAddComponent,
+    ArticleUpdateComponent,
   ],
   imports: [
     BrowserModule,

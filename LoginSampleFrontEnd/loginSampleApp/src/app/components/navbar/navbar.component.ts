@@ -13,6 +13,7 @@ import { AuthService } from 'src/app/services/auth.service';
     constructor(private authService:AuthService, private router:Router) {}
     
     isAdmin: boolean = false;
+    isWriter: boolean = false;
 
     async ngOnInit(): Promise<void> {
       this.authService.isAuthenticated().then((res) => {
@@ -20,6 +21,7 @@ import { AuthService } from 'src/app/services/auth.service';
     })
     
     this.authService.getUserRoles().includes("Admin") ? this.isAdmin = true : this.isAdmin = false;
+    this.authService.getUserRoles().includes("Writer") ? this.isWriter = true : this.isWriter = false;
   }
 
   logout(){    

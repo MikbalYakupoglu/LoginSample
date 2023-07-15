@@ -14,7 +14,9 @@ import { RoleComponent } from './components/role-manage/role.component';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 import { UserManagementComponent } from './components/user-management/user-management.component';
 import { ArticleComponent } from './components/article/article.component';
-import { ArticleManagementComponent } from './components/article-management/article-management.component';
+import { ArticleManagementComponent } from './components/article-management//article-manage/article-management.component';
+import { ArticleAddComponent } from './components/article-management/article-add/article-add.component';
+import { ArticleUpdateComponent } from './components/article-management/article-update/article-update.component';
 
 const routes: Routes = [
   { path: "home", component: ArticleComponent },
@@ -29,7 +31,9 @@ const routes: Routes = [
   { path: "articles/category/:categoryName", component: ArticleComponent },
 
   { path: "articles/manage", component: ArticleManagementComponent,canActivate: [loginGuard, roleGuard], data: {roles: [AuthorizationRoles.Admin, AuthorizationRoles.Writer]} },
-  { path: "articles/manage/:articleId", component: ArticleManagementComponent, canActivate: [loginGuard, roleGuard], data: {roles: [AuthorizationRoles.Admin, AuthorizationRoles.Writer]} },
+  { path: "articles/manage/create", component: ArticleAddComponent, canActivate: [loginGuard, roleGuard], data: {roles: [AuthorizationRoles.Admin, AuthorizationRoles.Writer]} },
+  { path: "articles/manage/update", component: ArticleUpdateComponent, canActivate: [loginGuard, roleGuard], data: {roles: [AuthorizationRoles.Admin, AuthorizationRoles.Writer]} },
+  { path: "articles/manage/update/:articleId", component: ArticleUpdateComponent, canActivate: [loginGuard, roleGuard], data: {roles: [AuthorizationRoles.Admin, AuthorizationRoles.Writer]} },
 
   { path: "admin/manage", component: AdminPanelComponent, canActivate: [loginGuard, roleGuard], data: {roles: [AuthorizationRoles.Admin]} },
   { path: "admin/manage/users", component: UserManagementComponent, canActivate: [loginGuard, roleGuard], data: {roles: [AuthorizationRoles.Admin]} },
